@@ -1,0 +1,31 @@
+name: quality checking
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: using node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: install decencies
+        run: npm install --ignore-optional --frozen-lockfile
+
+      - name: checking typescript
+        run: npm run check
+
+      - name: run eslint
+        run: npm run lint

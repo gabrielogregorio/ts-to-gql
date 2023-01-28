@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["es2021"],
+    "allowJs": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noErrorTruncation": true,
+    "outDir": "./dist",
+    "declaration": true,
+    "rootDir": "./src",
+    "removeComments": true,
+    "typeRoots": ["./node_modules/@types", "./src/@types"],
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/models/*": ["./src/models/*"],
+      "@/graphql/*": ["./src/graphql/*"],
+      "@/config/*": ["./src/config/*"],
+      "@/services/*": ["./src/services/*"],
+      "@/dto/*": ["./src/dto/*"],
+      "@/repository/*": ["./src/repository/*"],
+      "@/log/*": ["./src/log/*"],
+      "@/handlers/*": ["./src/handlers/*"],
+      "@/error/*": ["./src/error/*"],
+      "@/helpers/*": ["./src/helpers/*"],
+      "@/middleware/*": ["./src/middleware/*"],
+      "@/interfaces/*": ["./src/interfaces/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}
