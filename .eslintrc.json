@@ -81,6 +81,8 @@
           "lstatSync",
           "readdir",
           "lstat",
+          "graphql",
+          "gql",
           "docbytest",
           "tsconfig"
         ],
