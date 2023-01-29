@@ -1,9 +1,17 @@
 import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
 import { linesTsToGraphql } from '@/handlers/tsToGraphql';
 
-export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string) => {
+type typeResponse =
+  | undefined
+  | {
+      graphqlContentType: string;
+      graphqlName: string;
+    };
+
+const reGetInterfacesAndTypes = (name: string): RegExp => new RegExp(`${name}\\s{0,50}([^$]*)`);
+
+export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string): typeResponse[] => {
   const items = list.map((name) => {
-    const reGetInterfacesAndTypes = (name: string): RegExp => new RegExp(`${name}\\s{0,50}([^$]*)`);
     const options = reGetInterfacesAndTypes(name).exec(code);
     if (Boolean(options) === false) {
       return undefined;
@@ -15,21 +23,13 @@ export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string)
       ignoreCharactersOutString: [',', ';'],
     });
 
-    const discoveryTypeQuery = (queryName: string) => {
-      if (queryName.toLocaleLowerCase().includes('input')) {
-        return 'input';
-      }
-      return 'type';
-    };
-
-    const removeFirstBreakLineIfExists = (content: string) => content.replace(/^\n{0,10}/g, '');
+    const removeFirstBreakLineIfExists = (content: string): string => content.replace(/^\n{0,10}/g, '');
 
     return {
       graphqlContentType: removeFirstBreakLineIfExists(
         linesTsToGraphql(resultInterface, [{ from: 'Types.ObjectId', to: 'ID' }]),
       ),
       graphqlName: name,
-      graphqlType: discoveryTypeQuery(name),
     };
   });
 
@@ -40,6 +40,5 @@ export const textMountedSearchTypes = (
   content: {
     graphqlContentType: string;
     graphqlName: string;
-    graphqlType: string;
   }[],
-): string => content.map((item) => `${item.graphqlType} ${item.graphqlName} ${item.graphqlContentType}`).join('\n\n');
+): string => content.map((item) => `type ${item.graphqlName} ${item.graphqlContentType}`).join('\n\n');

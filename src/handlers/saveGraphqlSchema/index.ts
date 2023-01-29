@@ -1,4 +1,4 @@
-import { Log } from '@/helpers/log';
+import { Log } from '@/log/index';
 import fsNode from 'fs';
 
 export const saveGraphqlSchema = (path: string, graphqlSchema: string): void => {

@@ -3,7 +3,8 @@ import { generateGraphqlSchema } from '../index';
 describe('', () => {
   it('', () => {
     expect(generateGraphqlSchema()).toEqual(
-      `type GqlModelPostSelect \n{
+      `type GqlModelPostSelect
+{
   id: ObjectId!
   author: GqlModelUserSelect!
   body: String
@@ -11,21 +12,23 @@ describe('', () => {
   likes: [ObjectId]!
 }
 
-type GqlModelUserSelect \n{
+type GqlModelUserSelect
+{
   id: ObjectId!
   username: String!
   name: String!
   image: String!
 }
+
 input IInputQueryPostRequestId {
-    id: Number!
-  }
+  id: Number!
+}
 
 input IQueryGetUserInput {
-    id: String!
-  }
+  id: String!
+}
 
-    type Query {
+type Query {
   getPosts: [GqlModelPostSelect]!
   getPost(id: IInputQueryPostRequestId): GqlModelPostSelect!
   getUsers: [GqlModelUserSelect]!
@@ -33,45 +36,44 @@ input IQueryGetUserInput {
   getMe: GqlModelUserSelect!
 }
 
-    input IInputCreatePostPayload {
-    body: String!
-    img: String!
-    video: String!
+input IInputCreatePostPayload {
+  body: String!
+  img: String!
+  video: String!
 }
 
 input IInputUpdatePostPayload {
-    body: String!
-    img: String!
-    video: String!
-    id: String!
-  }
+  body: String!
+  img: String!
+  video: String!
+  id: String!
+}
 
 input IInputHandleDeletePayload {
-    id: String!
-  }
-
+  id: String!
+}
 
 input IInputHandlePostPayload {
-    postId: String!
-  }
+  postId: String!
+}
 
 input IInputCreateUserPayload {
-    username: String!
-    password: String!
-    name: String!
-  }
+  username: String!
+  password: String!
+  name: String!
+}
 
 input IInputUpdateUserPayload {
-    username: String!
-    name: String!
-    image: String!
-  }
+  username: String!
+  name: String!
+  image: String!
+}
 
 input IInputIdUser {
-    id: String!
-  }
+  id: String!
+}
 
-    type Mutation {
+type Mutation {
   createPost(createPostPayload: IInputCreatePostPayload): GqlModelPostSelect!
   updatePost(updatePostPayload: IInputUpdatePostPayload): UpdatePostResponse!
   deletePost(id: IInputHandleDeletePayload): DeletePostResponse!
@@ -81,38 +83,30 @@ input IInputIdUser {
   deleteUser(input: IInputIdUser): deleteUserResponse!
 }
 
-
-  type UpdatePostResponse {
+type UpdatePostResponse {
   count: Number!
 }
-
-
 
 type DeletePostResponse {
   count: Number!
 }
 
-
-
-
 type HandlePostResponse {
   includeLike: Boolean!
 }
-
 
 type CreateUserResponse {
   id: String!
 }
 
-
 type UpdateUserResponse {
   count: Number!
 }
 
-
 type deleteUserResponse {
   count: Number!
-}`,
+}
+`,
     );
   });
 });

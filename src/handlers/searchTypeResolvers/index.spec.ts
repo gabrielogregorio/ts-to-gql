@@ -45,13 +45,22 @@ describe('searchTypeResolvers()', () => {
 
     expect(searchTypeResolvers(mock, 'Query')).toEqual({
       keys: ['GqlModelUserSelect', 'GqlModelPostSelect'],
-      values: `type Query {
+      values: `input IInput {
+  id: String!
+}
+
+input IInputRequestId {
+  id: Number!
+}
+
+type Query {
   getUsers: [GqlModelUserSelect]!
   getUser(inputInside: IInput): GqlModelUserSelect!
   getMe: GqlModelUserSelect!
   getPosts: [GqlModelPostSelect]!
   getPost(inputInside2: IInputRequestId): GqlModelPostSelect!
-}`,
+}
+`,
     });
   });
 });

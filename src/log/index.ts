@@ -10,6 +10,7 @@ const colors: { [key in levelsType]: string } = {
 };
 
 /* eslint-disable no-console */
+
 export class Log {
   private static baseStart(level: levelsType): string {
     const start = `${level} - tsToGraphql`;

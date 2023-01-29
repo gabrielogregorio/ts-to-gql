@@ -1,4 +1,4 @@
-import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/helpers/searchTyieInterfacenDgetContent';
+import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/handlers/searchTyieInterfacenDgetContent';
 
 export const searchRemainingTypes = ({
   fullCodeMerged,

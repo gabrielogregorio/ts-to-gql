@@ -1,7 +1,7 @@
 import { searchModels } from '@/handlers/searchModels';
-import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/helpers/searchTyieInterfacenDgetContent';
+import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/handlers/searchTyieInterfacenDgetContent';
 
-const getInterface = (code: string) => {
+const getInterface = (code: string): string => {
   const regexSearchinterfaceMutationInFirstGroup = /interface IGraphqlMutation.*([^}]*)/;
   return regexSearchinterfaceMutationInFirstGroup.exec(code)[1];
 };
@@ -99,48 +99,6 @@ describe('', () => {
     expect(getInterface(mockCode)).toEqual(mockContentWithoutInterfaceBase);
   });
 
-  const mockResolverParamsAndResponse = [
-    {
-      nameResolver: 'getThis',
-      params: [],
-      response: 'Promise<IPostSelect>',
-    },
-    {
-      nameResolver: 'createPost',
-      params: [
-        { key: '_', value: 'any' },
-        { key: 'createPostPayload', value: 'InputCreatePostPayload' },
-        { key: 'context', value: 'IToken' },
-      ],
-      response: 'Promise<IPostSelect>',
-    },
-    {
-      nameResolver: 'updatePost',
-      params: [
-        { key: '_', value: 'any' },
-        { key: 'updatePostPayload', value: 'IInputUpdatePostPayload' },
-      ],
-      response: 'Promise<UpdatePostResponse>',
-    },
-    {
-      nameResolver: 'handleLike',
-      params: [
-        { key: '_', value: 'any' },
-        { key: 'handlePostPayload', value: 'IInputHandlePostPayload' },
-        { key: 'context', value: 'IToken' },
-      ],
-      response: 'Promise<HandlePostResponse>',
-    },
-    {
-      nameResolver: 'deletePost',
-      params: [
-        { key: '_', value: 'any' },
-        { key: 'id', value: 'IInputDeletePost' },
-      ],
-      response: 'Promise<DeletePostResponse>',
-    },
-  ];
-
   const mockListAllOtherTypes = [
     {
       graphqlContentType:
@@ -152,12 +110,10 @@ describe('', () => {
         '  }\n' +
         '}',
       graphqlName: 'InputCreatePostPayload',
-      graphqlType: 'input',
     },
     {
       graphqlContentType: '{\n  token: String!\n}',
       graphqlName: 'IToken',
-      graphqlType: 'type',
     },
     {
       graphqlContentType:
@@ -169,7 +125,6 @@ describe('', () => {
         '  likes: [ID]!\n' +
         '}',
       graphqlName: 'IPostSelect',
-      graphqlType: 'type',
     },
     {
       graphqlContentType:
@@ -182,27 +137,22 @@ describe('', () => {
         '  }\n' +
         '}',
       graphqlName: 'IInputUpdatePostPayload',
-      graphqlType: 'input',
     },
     {
       graphqlContentType: '{\n  count: Number!\n}',
       graphqlName: 'UpdatePostResponse',
-      graphqlType: 'type',
     },
     {
       graphqlContentType: '{\n  handlePostPayload {\n    postId: String!\n  }\n}',
       graphqlName: 'IInputHandlePostPayload',
-      graphqlType: 'input',
     },
     {
       graphqlContentType: '{\n  includeLike: Boolean!\n}',
       graphqlName: 'HandlePostResponse',
-      graphqlType: 'type',
     },
     {
       graphqlContentType: '{\n  id: String!\n}',
       graphqlName: 'IInputDeletePost',
-      graphqlType: 'input',
     },
   ];
 
@@ -223,7 +173,7 @@ describe('', () => {
   });
 
   it('should mount full model graphql extras', () => {
-    expect(textMountedSearchTypes(mockListAllOtherTypes)).toEqual(`input InputCreatePostPayload {
+    expect(textMountedSearchTypes(mockListAllOtherTypes)).toEqual(`type InputCreatePostPayload {
   createPostPayload {
     body: String!
     img: String!
@@ -243,7 +193,7 @@ type IPostSelect {
   likes: [ID]!
 }
 
-input IInputUpdatePostPayload {
+type IInputUpdatePostPayload {
   updatePostPayload {
     body: String!
     img: String!
@@ -256,7 +206,7 @@ type UpdatePostResponse {
   count: Number!
 }
 
-input IInputHandlePostPayload {
+type IInputHandlePostPayload {
   handlePostPayload {
     postId: String!
   }
@@ -266,7 +216,7 @@ type HandlePostResponse {
   includeLike: Boolean!
 }
 
-input IInputDeletePost {
+type IInputDeletePost {
   id: String!
 }`);
   });

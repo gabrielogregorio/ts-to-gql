@@ -1,4 +1,4 @@
-import { mapFiles } from '@/helpers/mapFiles';
+import { mapFiles } from '@/handlers/mapFiles';
 import fsPromise from 'fs';
 
 export const mapFilesAndGenerateBigFile = (): string => {

@@ -1,0 +1,2 @@
+export const INCREMENT_PREVENT_LOOP = 1;
+export const LIMIT_PREVENT_INFINITE_LOOPS: number = 2000;

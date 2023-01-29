@@ -1,7 +1,9 @@
 import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
 import { tsToGraphql } from '@/handlers/tsToGraphql';
 import { extractQueryOrMutationSignatures } from '@/handlers/extractQueryOrMutationSignatures';
-import { Log } from '@/helpers/log';
+import { prettify } from '@/handlers/prettify';
+
+// FIXME: REFACTOR
 
 type model = {
   nameResolver: string;
@@ -12,9 +14,10 @@ type model = {
   inputParam: string | undefined;
 };
 
-const removePromise = (type: string) => {
+const removePromise = (type: string): string => {
+  const LENGTH_TO_REMOVE_TEXT_PROMISE = 8;
   if (type.startsWith('Promise<')) {
-    return type.slice(8, type.length - 1);
+    return type.slice(LENGTH_TO_REMOVE_TEXT_PROMISE, type.length - 1);
   }
   return type;
 };
@@ -48,13 +51,15 @@ const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { items: mo
     const queryOrMutationSignatures = extractQueryOrMutationSignatures(contentQueryOrMutation, code);
 
     queryOrMutationSignatures.forEach((signatures) => {
-      const param = `${signatures.params?.key}: ${signatures.params?.value}`;
-      const showParam = signatures.params?.value === 'unknown' || signatures.params?.value === undefined ? '' : param;
-      const responseGraphql = tsToGraphql(removePromise(signatures.response), false, []);
+      const param = `${signatures.parameterResolver?.namePayloadGraphql}: ${signatures.parameterResolver?.value}`;
+      const showParam =
+        signatures.parameterResolver?.value === 'unknown' || signatures.parameterResolver?.value === undefined
+          ? ''
+          : param;
+      const responseGraphql = tsToGraphql(removePromise(signatures.responseResolver), false, []);
 
-      if (showParam && signatures.params.contentExtracted === undefined) {
-        // ignore extracted content
-        keys.push(signatures.params?.value?.replace(/[!\]\\[]/g, ''));
+      if (showParam && signatures.parameterResolver.contentExtracted === undefined) {
+        keys.push(signatures.parameterResolver?.value?.replace(/[!\]\\[]/g, ''));
       }
 
       if (responseGraphql) {
@@ -64,9 +69,9 @@ const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { items: mo
       items.push({
         nameResolver: signatures.nameResolver,
         nameInputParam2: showParam,
-        nameRealSignature: signatures.params?.value,
-        nameInputParam: signatures?.params?.key,
-        inputParam: signatures?.params?.contentExtracted,
+        nameRealSignature: signatures.parameterResolver?.value,
+        nameInputParam: signatures?.parameterResolver?.namePayloadGraphql,
+        inputParam: signatures?.parameterResolver?.contentExtracted,
         response: responseGraphql,
       });
     });
@@ -83,24 +88,26 @@ const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { items: mo
 
 export const searchTypeResolvers = (code: string, type: 'Query' | 'Mutation'): { values: string; keys: string[] } => {
   const items = searchAndPrepare(code, type);
-
-  return {
-    values: `
-
-    ${items.items
+  const getInputs = (): string =>
+    items.items
       .map((item) => {
         if (item?.nameRealSignature && item?.inputParam) {
           return `input ${item?.nameRealSignature} ${item?.inputParam}`;
         }
         return '';
       })
-      .join('\n')}
+      .join('\n\n');
 
-    type ${type} {
-${items.items
-  .map((item) => `  ${item.nameResolver}${item.nameInputParam ? `(${item.nameInputParam2})` : ''}: ${item.response}`)
-  .join('\n')}
-}`,
+  const getQueryOrMutation = (): string =>
+    items.items
+      .map((item) => {
+        const insideTest = `(${item.nameInputParam2})`;
+        return `  ${item.nameResolver}${item.nameInputParam ? insideTest : ''}: ${item.response}`;
+      })
+      .join('\n');
+
+  return {
+    values: prettify(`\n${getInputs()}\ntype ${type} {\n${getQueryOrMutation()}\n}`),
     keys: items.keys,
   };
 };

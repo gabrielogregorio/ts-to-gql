@@ -1,8 +1,8 @@
-import { Log } from '@/helpers/log';
-import { mapFilesAndGenerateBigFile } from '@/helpers/mapFilesAndGenerateBigFile';
-import { saveGraphqlSchema } from '@/helpers/saveGraphqlSchema';
+import { mapFilesAndGenerateBigFile } from '@/handlers/mapFilesAndGenerateBigFile';
 import { mergeGqlTypes } from '@/handlers/mergeGqlTypes';
+import { saveGraphqlSchema } from '@/handlers/saveGraphqlSchema';
 import { searchTypesInCode } from '@/handlers/searchTypesInCode';
+import { Log } from '@/log/index';
 
 const saveGraphqlSchemaPath: string = './schema.ts_to_gql.graphql';
 
