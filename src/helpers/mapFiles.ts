@@ -1,3 +1,4 @@
+import { Log } from '@/helpers/log';
 import fsNode from 'fs';
 import path from 'path';
 
@@ -19,6 +20,10 @@ const ignoreFiles = ['.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx'];
 const ignoreFolders = ['node_modules'];
 
 export const mapFiles = (basePath: string): string[] => {
+  Log.warning(`consider only '${USE_ONLY_FILES_END_WITH}' files`);
+  Log.warning(`ignoring '${ignoreFolders}' folders`);
+  Log.warning(`ignoring '${ignoreFiles}' files`);
+
   const allFiles = readdirSync(basePath, [], ignoreFolders);
   const files: string[] = [];
 
@@ -27,6 +32,8 @@ export const mapFiles = (basePath: string): string[] => {
       files.push(file);
     }
   });
+
+  Log.info(`find '${files.length}' files to analyze`);
 
   return files;
 };

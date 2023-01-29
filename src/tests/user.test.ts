@@ -1,9 +1,9 @@
 import { fromInterfaceGetResolverNameParamsAndReturn } from '@/handlers/fromInterfaceGetResolverNameParamsAndReturn';
 import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
 import { searchModels } from '@/handlers/searchModels';
-import { searchQueries } from '@/handlers/searchQueries';
-import { transformTsToGraphql } from '@/handlers/tsToGraphql';
+import { linesTsToGraphql } from '@/handlers/tsToGraphql';
 import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/helpers/searchTyieInterfacenDgetContent';
+import { searchTypeResolvers } from '@/handlers/searchTypeResolvers';
 
 const getInterface = (code: string) => {
   const regexSearchinterfaceMutationInFirstGroup = /interface IGraphqlMutation.*([^}]*)/;
@@ -149,62 +149,6 @@ describe('', () => {
     expect(fromInterfaceGetResolverNameParamsAndReturn(mockContentWithoutInterfaceBase)).toEqual(
       mockResolverParamsAndResponse,
     );
-  });
-
-  it('', () => {
-    const mockInput = `
-    key: string
-    key: string[]
-    key?: string
-    key?: string[]
-
-    key: number
-    key: number[]
-    key?: number
-    key?: number[]
-
-    key: boolean
-    key: boolean[]
-    key?: boolean
-    key?: boolean[]
-
-    key: what
-    key: what[]
-    key?: what
-    key?: what[]
-
-    key: Types.ObjectId
-    key: Types.ObjectId[]
-    key?: Types.ObjectId
-    key?: Types.ObjectId[]
-
-    key: IAuth
-    key: IAuth[]`;
-
-    const mockData = `
-    key: String!
-    key: [String]!
-    key: String
-    key: [String]
-    key: Number!
-    key: [Number]!
-    key: Number
-    key: [Number]
-    key: Boolean!
-    key: [Boolean]!
-    key: Boolean
-    key: [Boolean]
-    key: what!
-    key: [what]!
-    key: what
-    key: [what]
-    key: ID!
-    key: [ID]!
-    key: ID
-    key: [ID]
-    key: IAuth!
-    key: [IAuth]!`;
-    expect(transformTsToGraphql(mockInput, [{ from: 'Types.ObjectId', to: 'ID' }])).toEqual(mockData);
   });
 
   const mockListAllOtherTypes = [
@@ -472,7 +416,7 @@ interface IInputHandlePostPayload {
       }`;
 
     expect(searchModels(mock)).toEqual({
-      finishKeys: ['GqlModelPostSelect', 'GqlModelUserSelect'],
+      listModelsMapped: ['GqlModelPostSelect', 'GqlModelUserSelect'],
       queries: `type GqlModelPostSelect \n{
       id: ObjectId!
       author: GqlModelUserSelect!
@@ -528,7 +472,7 @@ type GqlModelUserSelect \n{
 
 `;
 
-    expect(searchQueries(mock, 'Query')).toEqual({
+    expect(searchTypeResolvers(mock, 'Query')).toEqual({
       keys: [
         'GqlModelUserSelect',
         'IInput',

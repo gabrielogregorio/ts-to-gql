@@ -1,51 +1,23 @@
-import { searchModels } from '@/handlers/searchModels';
-import { searchQueries } from '@/handlers/searchQueries';
-import { mapFiles } from '@/helpers/mapFiles';
-import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/helpers/searchTyieInterfacenDgetContent';
-import fsPromise from 'fs';
+import { Log } from '@/helpers/log';
+import { mapFilesAndGenerateBigFile } from '@/helpers/mapFilesAndGenerateBigFile';
+import { saveGraphqlSchema } from '@/helpers/saveGraphqlSchema';
+import { mergeGqlTypes } from '@/handlers/mergeGqlTypes';
+import { searchTypesInCode } from '@/handlers/searchTypesInCode';
 
-const getActualMoment = (): string => new Date().toLocaleString('en-US', { timeStyle: 'long' });
+const saveGraphqlSchemaPath: string = './schema.ts_to_gql.graphql';
 
 export const generateGraphqlSchema = (): string => {
-  const graphqlSchema: string = 'schema.ts_to_gql.graphql';
-  // console.log(`[TS-TO-GQL] ${getActualMoment()} - Not add ${graphqlSchema} in gitignore`);
+  Log.info('running in developer mode');
 
-  const items: string[] = mapFiles('.');
-  const allProject = items.map((item) => fsPromise.readFileSync(item, { encoding: 'utf-8' })).join('\n');
+  const fullCodeMerged = mapFilesAndGenerateBigFile();
 
-  const models = searchModels(allProject);
-  const queries = searchQueries(allProject, 'Query');
-  const mutation = searchQueries(allProject, 'Mutation');
+  const typesToMerge = searchTypesInCode(fullCodeMerged);
 
-  const notAnalysed = [];
-  queries.keys.forEach((item) => {
-    if (models.finishKeys.includes(item) === false && notAnalysed.includes(item) === false) {
-      notAnalysed.push(item);
-    }
-  });
+  const completeGqlModel = mergeGqlTypes(typesToMerge);
 
-  mutation.keys.forEach((item) => {
-    if (models.finishKeys.includes(item) === false && notAnalysed.includes(item) === false) {
-      notAnalysed.push(item);
-    }
-  });
+  saveGraphqlSchema(saveGraphqlSchemaPath, completeGqlModel);
 
-  const lastModels = textMountedSearchTypes(searchTypeOrInterfaceAndGetContent(notAnalysed, allProject));
-
-  return `${models.queries}
-  ${queries.values}
-  ${mutation.values}
-  ${lastModels}`;
-  //   try {
-  //     fsPromise.writeFileSync(
-  //       graphqlSchema,
-  //       `
-  // ${models.queries}
-  // ${queries.values}
-  // ${mutation.values}
-  // ${lastModels}`,
-  //     );
-  //   } catch (error: unknown) {
-  //     console.log(`[TS-TO-GQL] ${getActualMoment()} - Error on save ${graphqlSchema}, please, check permissions`);
-  //   }
+  return completeGqlModel;
 };
+
+generateGraphqlSchema();

@@ -1,4 +1,4 @@
-import { transformTsToGraphql, tsToGraphql } from './tsToGraphql';
+import { linesTsToGraphql, tsToGraphql } from './tsToGraphql';
 
 const INCREMENT_PREVENT_LOOP: number = 1;
 export const LIMIT_PREVENT_INFINITE_LOOPS: number = 200;
@@ -20,7 +20,7 @@ export const getModels = (code) => {
       const itemsType = regexRouter[2];
 
       const removePrefixI = (nameKey: string) => nameKey.slice(1, nameType.length);
-      schemaPartial += `\ntype ${removePrefixI(nameType)} {${transformTsToGraphql(itemsType)}
+      schemaPartial += `\ntype ${removePrefixI(nameType)} {${linesTsToGraphql(itemsType)}
 }
 
       `;

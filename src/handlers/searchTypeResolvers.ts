@@ -69,7 +69,7 @@ const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { items: mo
   return { items, keys };
 };
 
-export const searchQueries = (code: string, type: 'Query' | 'Mutation'): { values: string; keys: string[] } => {
+export const searchTypeResolvers = (code: string, type: 'Query' | 'Mutation'): { values: string; keys: string[] } => {
   const items = searchAndPrepare(code, type);
   return {
     values: `type ${type} {

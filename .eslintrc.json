@@ -82,6 +82,7 @@
           "readdir",
           "lstat",
           "graphql",
+          "resolvers",
           "gql",
           "docbytest",
           "tsconfig"

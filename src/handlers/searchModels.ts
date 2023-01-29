@@ -1,5 +1,5 @@
 import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
-import { transformTsToGraphql } from '@/handlers/tsToGraphql';
+import { linesTsToGraphql } from '@/handlers/tsToGraphql';
 
 type model = {
   nameModel: string;
@@ -30,7 +30,7 @@ const searchAndPrepare = (code): model[] => {
 
     items.push({
       nameModel,
-      content: transformTsToGraphql(content, [{ from: 'Types.ObjectId', to: 'ID' }]),
+      content: linesTsToGraphql(content, [{ from: 'Types.ObjectId', to: 'ID' }]),
     });
 
     count += 1;
@@ -43,13 +43,13 @@ const searchAndPrepare = (code): model[] => {
   return items;
 };
 
-export const searchModels = (code): { queries: string; finishKeys: string[] } => {
+export const searchModels = (code): { queries: string; listModelsMapped: string[] } => {
   const items: model[] = searchAndPrepare(code);
-  const finishKeys: string[] = [];
+  const listModelsMapped: string[] = [];
 
   const queries = items
     .map((item) => {
-      finishKeys.push(item.nameModel);
+      listModelsMapped.push(item.nameModel);
 
       return `type ${item.nameModel} ${item.content}`;
     })
@@ -57,6 +57,6 @@ export const searchModels = (code): { queries: string; finishKeys: string[] } =>
 
   return {
     queries,
-    finishKeys,
+    listModelsMapped,
   };
 };

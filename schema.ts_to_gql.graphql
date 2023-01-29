@@ -1,4 +1,3 @@
-
 type GqlModelPostSelect 
 {
   id: ObjectId!
@@ -15,14 +14,14 @@ type GqlModelUserSelect
   name: String!
   image: String!
 }
-type Query {
+  type Query {
   getPosts: [GqlModelPostSelect]!
   getPost(id: IRequestId): GqlModelPostSelect!
   getUsers: [GqlModelUserSelect]!
   getUser(id: IInput): GqlModelUserSelect!
   getMe: GqlModelUserSelect!
 }
-type Mutation {
+  type Mutation {
   createPost(createPostPayload: IInputCreatePostPayload): GqlModelPostSelect!
   updatePost(updatePostPayload: IInputUpdatePostPayload): UpdatePostResponse!
   deletePost(id: IInputHandleDeletePayload): DeletePostResponse!
@@ -31,7 +30,7 @@ type Mutation {
   updateUser(updateUserPayload: IInputUpdateUserPayload): UpdateUserResponse!
   deleteUser(id: idUser): deleteUserResponse!
 }
-type IRequestId {
+  type IRequestId {
   id: Number!
 }
 

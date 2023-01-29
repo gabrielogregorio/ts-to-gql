@@ -1,5 +1,5 @@
 import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
-import { transformTsToGraphql } from '@/handlers/tsToGraphql';
+import { linesTsToGraphql } from '@/handlers/tsToGraphql';
 
 export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string) =>
   list.map((name) => {
@@ -23,7 +23,7 @@ export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string)
 
     return {
       graphqlContentType: removeFirstBreakLineIfExists(
-        transformTsToGraphql(resultInterface, [{ from: 'Types.ObjectId', to: 'ID' }]),
+        linesTsToGraphql(resultInterface, [{ from: 'Types.ObjectId', to: 'ID' }]),
       ),
       graphqlName: name,
       graphqlType: discoveryTypeQuery(name),
