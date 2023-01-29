@@ -1,11 +1,15 @@
-import { fromInterfaceGetResolverNameParamsAndReturn } from '@/handlers/fromInterfaceGetResolverNameParamsAndReturn';
 import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
 import { tsToGraphql } from '@/handlers/tsToGraphql';
+import { extractQueryOrMutationSignatures } from '@/handlers/extractQueryOrMutationSignatures';
+import { Log } from '@/helpers/log';
 
 type model = {
   nameResolver: string;
-  param: string;
   response: string;
+  nameInputParam2: string;
+  nameRealSignature: string;
+  nameInputParam: string;
+  inputParam: string | undefined;
 };
 
 const removePromise = (type: string) => {
@@ -14,38 +18,43 @@ const removePromise = (type: string) => {
   }
   return type;
 };
+
+const regexSearchFirstOccurrenceQueryOrMutation = (type: 'Query' | 'Mutation'): RegExp =>
+  new RegExp(`[type|interface]\\s{1,50}(Gql${type}\\w{1,500})\\s{0,500}=\\s{0,500}([^$]*)`);
+
 const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { items: model[]; keys: string[] } => {
-  const searchFirstOcurrence = new RegExp(
-    `[type|interface]\\s{1,50}(Gql${type}\\w{1,500})\\s{0,500}=\\s{0,500}([^$]*)`,
-  );
   let count = 0;
-  let indexToStart = 0;
+  let indexToIgnoreFirstOccurrence = 0;
 
   const items: model[] = [];
   const keys: string[] = [];
 
   while (true) {
-    const textToAnalyse = code.slice(indexToStart, code.length);
-    const results = searchFirstOcurrence.exec(textToAnalyse);
-    if (Boolean(results) === false) {
+    const textToAnalyze = code.slice(indexToIgnoreFirstOccurrence, code.length);
+    const resultFirstOccurrenceQueryOrMutation = regexSearchFirstOccurrenceQueryOrMutation(type).exec(textToAnalyze);
+    if (Boolean(resultFirstOccurrenceQueryOrMutation) === false) {
       break;
     }
-    indexToStart = indexToStart + results.index + results[1].length;
 
-    const content = getRecursiveContentInRegion(results[2], {
+    const positionFirstOccurrence = resultFirstOccurrenceQueryOrMutation.index;
+    const lengthNameQueryOrMutation = resultFirstOccurrenceQueryOrMutation[1].length;
+    indexToIgnoreFirstOccurrence = indexToIgnoreFirstOccurrence + positionFirstOccurrence + lengthNameQueryOrMutation;
+
+    const contentQueryOrMutation = getRecursiveContentInRegion(resultFirstOccurrenceQueryOrMutation[2], {
       startDelimiter: '{',
       endDelimiter: '}',
       skipStrings: true,
     });
-    const itemsss = fromInterfaceGetResolverNameParamsAndReturn(content);
+    const queryOrMutationSignatures = extractQueryOrMutationSignatures(contentQueryOrMutation, code);
 
-    itemsss.forEach((local) => {
-      const param = `${local.params?.[1]?.key}: ${local.params?.[1]?.value}`;
-      const showParam = local.params?.[1]?.value === 'unknown' || local.params?.[1]?.value === undefined ? '' : param;
-      const responseGraphql = tsToGraphql(removePromise(local.response), false, []);
+    queryOrMutationSignatures.forEach((signatures) => {
+      const param = `${signatures.params?.key}: ${signatures.params?.value}`;
+      const showParam = signatures.params?.value === 'unknown' || signatures.params?.value === undefined ? '' : param;
+      const responseGraphql = tsToGraphql(removePromise(signatures.response), false, []);
 
-      if (showParam) {
-        keys.push(local.params?.[1]?.value?.replace(/[!\]\\[]/g, ''));
+      if (showParam && signatures.params.contentExtracted === undefined) {
+        // ignore extracted content
+        keys.push(signatures.params?.value?.replace(/[!\]\\[]/g, ''));
       }
 
       if (responseGraphql) {
@@ -53,8 +62,11 @@ const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { items: mo
       }
 
       items.push({
-        nameResolver: local.nameResolver,
-        param: showParam,
+        nameResolver: signatures.nameResolver,
+        nameInputParam2: showParam,
+        nameRealSignature: signatures.params?.value,
+        nameInputParam: signatures?.params?.key,
+        inputParam: signatures?.params?.contentExtracted,
         response: responseGraphql,
       });
     });
@@ -66,15 +78,27 @@ const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { items: mo
     }
   }
 
-  return { items, keys };
+  return { items, keys: [...new Set(keys)] };
 };
 
 export const searchTypeResolvers = (code: string, type: 'Query' | 'Mutation'): { values: string; keys: string[] } => {
   const items = searchAndPrepare(code, type);
+
   return {
-    values: `type ${type} {
+    values: `
+
+    ${items.items
+      .map((item) => {
+        if (item?.nameRealSignature && item?.inputParam) {
+          return `input ${item?.nameRealSignature} ${item?.inputParam}`;
+        }
+        return '';
+      })
+      .join('\n')}
+
+    type ${type} {
 ${items.items
-  .map((item) => `  ${item.nameResolver}${item.param ? `(${item.param})` : ''}: ${item.response}`)
+  .map((item) => `  ${item.nameResolver}${item.nameInputParam ? `(${item.nameInputParam2})` : ''}: ${item.response}`)
   .join('\n')}
 }`,
     keys: items.keys,

@@ -25,19 +25,19 @@ export class Log {
     return level;
   }
 
-  public static info(message: unknown): void {
-    console.info(`${this.baseStart('INFO ')}`, message);
+  public static info(message: unknown, message2: unknown = ''): void {
+    console.info(`${this.baseStart('INFO ')}`, message, message2);
   }
 
-  public static error(message: unknown): void {
-    console.error(`${this.baseStart('ERROR')}`, message);
+  public static error(message: unknown, message2: unknown = ''): void {
+    console.error(`${this.baseStart('ERROR')}`, message, message2);
   }
 
-  public static debug(message: unknown): void {
-    console.debug(`${this.baseStart('DEBUG')}`, message);
+  public static debug(message: unknown, message2: unknown = ''): void {
+    console.debug(`${this.baseStart('DEBUG')}`, message, message2);
   }
 
-  public static warning(message: unknown): void {
-    console.warn(`${this.baseStart('WARN ')}`, message);
+  public static warning(message: unknown, message2: unknown = ''): void {
+    console.warn(`${this.baseStart('WARN ')}`, message, message2);
   }
 }

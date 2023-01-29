@@ -26,8 +26,10 @@ type deleteUserResponse = {
   count: number;
 };
 
-type idUser = {
-  id: string;
+type IInputIdUser = {
+  input: {
+    id: string;
+  };
 };
 
 type tokenRequest = {
@@ -41,7 +43,7 @@ type GqlMutationUser = {
     updateUserPayload: IInputUpdateUserPayload,
     token: tokenRequest,
   ) => Promise<UpdateUserResponse>;
-  deleteUser: (_: unknown, id: idUser, token: tokenRequest) => Promise<deleteUserResponse>;
+  deleteUser: (_: unknown, id: IInputIdUser, token: tokenRequest) => Promise<deleteUserResponse>;
 };
 
 export const UserResolverMutation: GqlMutationUser = {

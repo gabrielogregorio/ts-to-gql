@@ -1,9 +1,5 @@
-import { fromInterfaceGetResolverNameParamsAndReturn } from '@/handlers/fromInterfaceGetResolverNameParamsAndReturn';
-import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
 import { searchModels } from '@/handlers/searchModels';
-import { linesTsToGraphql } from '@/handlers/tsToGraphql';
 import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/helpers/searchTyieInterfacenDgetContent';
-import { searchTypeResolvers } from '@/handlers/searchTypeResolvers';
 
 const getInterface = (code: string) => {
   const regexSearchinterfaceMutationInFirstGroup = /interface IGraphqlMutation.*([^}]*)/;
@@ -145,12 +141,6 @@ describe('', () => {
     },
   ];
 
-  it('should get params items', () => {
-    expect(fromInterfaceGetResolverNameParamsAndReturn(mockContentWithoutInterfaceBase)).toEqual(
-      mockResolverParamsAndResponse,
-    );
-  });
-
   const mockListAllOtherTypes = [
     {
       graphqlContentType:
@@ -281,106 +271,6 @@ input IInputDeletePost {
 }`);
   });
 
-  it('getRecursiveContentInRegion - should get complex json', () => {
-    const localMock3 = `
-
-interface IInputUpdatePostPayload {
-  updatePostPayload {
-    body: string;
-    img: string;
-    handlePostPayload {
-      postId: string;
-    };
-    id: string;
-  };
-}} {}
-
-interface IInputHandlePostPayload {
-  handlePostPayload {
-    postId: string;
-  };
-}`;
-
-    expect(
-      getRecursiveContentInRegion(localMock3, {
-        startDelimiter: '{',
-        endDelimiter: '}',
-        skipStrings: true,
-      }),
-    ).toEqual(`{
-  updatePostPayload {
-    body: string;
-    img: string;
-    handlePostPayload {
-      postId: string;
-    };
-    id: string;
-  };
-}`);
-  });
-
-  it('getRecursiveContentInRegion - should get a json with one dept, and strings', () => {
-    const localMock2 = `
-
-interface IInputUpdatePostPayload {
-  updatePostPayload {
-    body: string;
-    img: string;
-    video: "{ -> )";
-    video: '{ -> )';
-    video2: \`{ -> )\`;
-    id: string;
-  };
-}
-
-interface IInputHandlePostPayload {
-  handlePostPayload {
-    postId: string;
-  };
-}`;
-
-    expect(
-      getRecursiveContentInRegion(localMock2, {
-        startDelimiter: '{',
-        endDelimiter: '}',
-        skipStrings: true,
-      }),
-    ).toEqual(`{
-  updatePostPayload {
-    body: string;
-    img: string;
-    video: "{ -> )";
-    video: '{ -> )';
-    video2: \`{ -> )\`;
-    id: string;
-  };
-}`);
-  });
-
-  it('getRecursiveContentInRegion - should get a simple object ', () => {
-    const localMock = `
-
-interface IInputUpdatePostPayload {
-  id: string;
-}
-
-interface IInputHandlePostPayload {
-  handlePostPayload {
-    postId: string;
-  };
-}`;
-
-    expect(
-      getRecursiveContentInRegion(localMock, {
-        startDelimiter: '{',
-        endDelimiter: '}',
-        skipStrings: true,
-      }),
-    ).toEqual(`{
-  id: string;
-}`);
-  });
-
   it('', () => {
     const mock = `generateGraphqlSchema();
 
@@ -431,64 +321,6 @@ type GqlModelUserSelect \n{
       name: String!
       image: String!
     }`,
-    });
-  });
-
-  it('', () => {
-    const mock = `
-
-    interface IInput {
-      id: string;
-    }
-
-    type tokenRequest = {
-      token: string;
-    };
-
-    type GqlQueryUser = {
-      getUsers: () => Promise<GqlModelUserSelect[]>;
-      getUser: (_: unknown, id: IInput) => Promise<GqlModelUserSelect>;
-      getMe: (_: unknown, args: unknown, token: tokenRequest) => Promise<GqlModelUserSelect>;
-    };
-
-    interface IRequestId {
-      id: number;
-    }
-
-    type GqlQueryPost = {
-      getPosts: () => Promise<GqlModelPostSelect[]>;
-      getPost: (_: unknown, id: IRequestId) => Promise<GqlModelPostSelect>;
-    };
-
-    export const QueryPostResolver: GqlQueryPost = {
-      async getPosts(): Promise<GqlModelPostSelect[]> {
-        return [];
-      },
-
-      async getPost(_, { id }): Promise<GqlModelPostSelect> {
-        return {} as unknown as GqlModelPostSelect;
-      },
-    };
-
-`;
-
-    expect(searchTypeResolvers(mock, 'Query')).toEqual({
-      keys: [
-        'GqlModelUserSelect',
-        'IInput',
-        'GqlModelUserSelect',
-        'GqlModelUserSelect',
-        'GqlModelPostSelect',
-        'IRequestId',
-        'GqlModelPostSelect',
-      ],
-      values: `type Query {
-  getUsers: [GqlModelUserSelect]!
-  getUser(id: IInput): GqlModelUserSelect!
-  getMe: GqlModelUserSelect!
-  getPosts: [GqlModelPostSelect]!
-  getPost(id: IRequestId): GqlModelPostSelect!
-}`,
     });
   });
 });

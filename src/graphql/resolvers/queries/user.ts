@@ -1,7 +1,9 @@
 import { GqlModelUserSelect } from '@/models/User';
 
-interface IInput {
-  id: string;
+interface IQueryGetUserInput {
+  createUserPayload: {
+    id: string;
+  };
 }
 
 type tokenRequest = {
@@ -10,7 +12,7 @@ type tokenRequest = {
 
 type GqlQueryUser = {
   getUsers: () => Promise<GqlModelUserSelect[]>;
-  getUser: (_: unknown, id: IInput) => Promise<GqlModelUserSelect>;
+  getUser: (_: unknown, id: IQueryGetUserInput) => Promise<GqlModelUserSelect>;
   getMe: (_: unknown, args: unknown, token: tokenRequest) => Promise<GqlModelUserSelect>;
 };
 

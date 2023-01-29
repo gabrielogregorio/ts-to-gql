@@ -1,10 +1,13 @@
 import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
 import { linesTsToGraphql } from '@/handlers/tsToGraphql';
 
-export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string) =>
-  list.map((name) => {
+export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string) => {
+  const items = list.map((name) => {
     const reGetInterfacesAndTypes = (name: string): RegExp => new RegExp(`${name}\\s{0,50}([^$]*)`);
     const options = reGetInterfacesAndTypes(name).exec(code);
+    if (Boolean(options) === false) {
+      return undefined;
+    }
     const resultInterface = getRecursiveContentInRegion(options[1], {
       startDelimiter: '{',
       endDelimiter: '}',
@@ -29,6 +32,9 @@ export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string)
       graphqlType: discoveryTypeQuery(name),
     };
   });
+
+  return items.filter((item) => item !== undefined);
+};
 
 export const textMountedSearchTypes = (
   content: {
