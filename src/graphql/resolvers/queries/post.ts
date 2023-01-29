@@ -16,7 +16,7 @@ export const QueryPostResolver: GqlQueryPost = {
     return [];
   },
 
-  async getPost(_, { id }): Promise<GqlModelPostSelect> {
+  async getPost(_, { id: { id } }): Promise<GqlModelPostSelect> {
     return {} as unknown as GqlModelPostSelect;
   },
 };

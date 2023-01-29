@@ -7,7 +7,7 @@ describe('searchRemainingTypes()', () => {
 `;
 
   it('should try analyze but not exists types not analyzed', () => {
-    const typesNotAnalyzed = [];
+    const typesNotAnalyzed: string[] = [];
     expect(searchRemainingTypes({ fullCodeMerged, typesNotAnalyzed })).toEqual('');
   });
 

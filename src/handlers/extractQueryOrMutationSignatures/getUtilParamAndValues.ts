@@ -15,7 +15,11 @@ export const getUtilParamAndValues = (paramsResolver: string, fullCode: string):
   const params = splitParams(paramsResolver.replace(/\n/g, ''));
   const graphqlUtilType = params[1];
 
-  if (Boolean(graphqlUtilType) === false || typeToIgnore.includes(graphqlUtilType.value)) {
+  if (
+    Boolean(graphqlUtilType) === false ||
+    typeToIgnore.includes(graphqlUtilType?.value || '') ||
+    graphqlUtilType?.value === undefined
+  ) {
     return undefined;
   }
 
@@ -28,7 +32,7 @@ export const getUtilParamAndValues = (paramsResolver: string, fullCode: string):
 
   const reGetPatternPayloads = /^\s{0,50}{\s{0,50}([\w]{1,})\s{0,50}(\{[^$]{0,})/;
   const resultRePatternPayload = reGetPatternPayloads.exec(extraTypeData?.graphqlContentType || '');
-  if (Boolean(resultRePatternPayload) === false) {
+  if (Boolean(resultRePatternPayload) === false || resultRePatternPayload === null) {
     Log.error(
       `O tipo '${graphqlUtilType.value}' precisa seguir o padrão de payloads. substitua 'interface MyInterface { id: number }' para interface MyInterface { exampleInput: { id: number } }`,
     );
@@ -51,6 +55,6 @@ export const getUtilParamAndValues = (paramsResolver: string, fullCode: string):
   return {
     namePayloadGraphql,
     value: graphqlUtilType.value,
-    contentExtracted,
+    contentExtracted: contentExtracted || '',
   };
 };

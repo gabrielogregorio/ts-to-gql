@@ -27,10 +27,10 @@
       "@/services/*": ["./src/services/*"],
       "@/dto/*": ["./src/dto/*"],
       "@/repository/*": ["./src/repository/*"],
+      "@/constants/*": ["./src/constants/*"],
       "@/log/*": ["./src/log/*"],
       "@/handlers/*": ["./src/handlers/*"],
       "@/error/*": ["./src/error/*"],
-      "@/helpers/*": ["./src/helpers/*"],
       "@/middleware/*": ["./src/middleware/*"],
       "@/interfaces/*": ["./src/interfaces/*"]
     }

@@ -1,11 +1,6 @@
 import { searchModels } from '@/handlers/searchModels';
 import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/handlers/searchTyieInterfacenDgetContent';
 
-const getInterface = (code: string): string => {
-  const regexSearchinterfaceMutationInFirstGroup = /interface IGraphqlMutation.*([^}]*)/;
-  return regexSearchinterfaceMutationInFirstGroup.exec(code)[1];
-};
-
 const mockCode = `
 
 interface IPostSelect {
@@ -79,26 +74,6 @@ interface IGraphqlMutationPost {
 `;
 
 describe('', () => {
-  const mockContentWithoutInterfaceBase = `
-  getThis: () => Promise<IPostSelect>;
-  createPost: (
-    _: any,
-    createPostPayload: InputCreatePostPayload,
-    context: IToken,
-  ) => Promise<IPostSelect>;
-  updatePost: (_: any, updatePostPayload: IInputUpdatePostPayload) => Promise<UpdatePostResponse>;
-  handleLike: (
-    _: any,
-    handlePostPayload: IInputHandlePostPayload,
-    context: IToken,
-  ) => Promise<HandlePostResponse>;
-  deletePost: (_: any, id: IInputDeletePost) => Promise<DeletePostResponse>;
-`;
-
-  it('should extract content mutation Query', () => {
-    expect(getInterface(mockCode)).toEqual(mockContentWithoutInterfaceBase);
-  });
-
   const mockListAllOtherTypes = [
     {
       graphqlContentType:

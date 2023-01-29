@@ -13,7 +13,7 @@ const reGetInterfacesAndTypes = (name: string): RegExp => new RegExp(`${name}\\s
 export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string): typeResponse[] => {
   const items = list.map((name) => {
     const options = reGetInterfacesAndTypes(name).exec(code);
-    if (Boolean(options) === false) {
+    if (Boolean(options) === false || options === null) {
       return undefined;
     }
     const resultInterface = getRecursiveContentInRegion(options[1], {
@@ -27,7 +27,7 @@ export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string)
 
     return {
       graphqlContentType: removeFirstBreakLineIfExists(
-        linesTsToGraphql(resultInterface, [{ from: 'Types.ObjectId', to: 'ID' }]),
+        linesTsToGraphql(resultInterface || '', [{ from: 'Types.ObjectId', to: 'ID' }]),
       ),
       graphqlName: name,
     };

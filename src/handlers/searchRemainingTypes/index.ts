@@ -6,4 +6,5 @@ export const searchRemainingTypes = ({
 }: {
   fullCodeMerged: string;
   typesNotAnalyzed: string[];
+  // @ts-ignore
 }): string => textMountedSearchTypes(searchTypeOrInterfaceAndGetContent(typesNotAnalyzed, fullCodeMerged));

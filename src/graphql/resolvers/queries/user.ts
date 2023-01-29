@@ -21,7 +21,7 @@ export const QueryUserResolver: GqlQueryUser = {
     return [];
   },
 
-  async getUser(_, { id }): Promise<GqlModelUserSelect> {
+  async getUser(_, { createUserPayload: { id } }): Promise<GqlModelUserSelect> {
     return {} as unknown as GqlModelUserSelect;
   },
 

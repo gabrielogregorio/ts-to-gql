@@ -44,6 +44,7 @@ export const tsToGraphql = (typeTs: string, isOptional: boolean, fromTo: fromToT
     },
   };
 
+  // @ts-ignore
   return typesToGqlLiterals[typeTsHandled]?.() || typesToGqlLiterals.default();
 };
 

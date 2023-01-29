@@ -1,5 +1,6 @@
 import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
 import { linesTsToGraphql } from '@/handlers/tsToGraphql';
+import { Log } from '@/log/index';
 
 // TODO: REFACTOR
 type model = {
@@ -7,22 +8,33 @@ type model = {
   content: string;
 };
 
-const searchAndPrepare = (code): model[] => {
-  const searchFirstOcurrence = /[type|interface]\s{1,50}(GqlModel\w{1,500})\s{0,500}=\s{0,500}([^$]*)/;
-  let count = 0;
+// FIXME: DUPLICATED searchAndPrepare()
+const searchAndPrepare = (code: string): model[] => {
+  const searchFirstOccurrence = /[type|interface]\s{1,50}(GqlModel\w{1,500})\s{0,500}=\s{0,500}([^$]*)/;
+  let preventInfiniteLoop = 0;
   let indexToStart = 0;
 
   const items: model[] = [];
-
+  const INDEX_TO_BREAK_LOOP: number = 20;
   while (true) {
-    const textToAnalyse = code.slice(indexToStart, code.length);
-    const results = searchFirstOcurrence.exec(textToAnalyse);
-    if (Boolean(results) === false) {
+    preventInfiniteLoop += 1;
+    if (preventInfiniteLoop === INDEX_TO_BREAK_LOOP) {
+      Log.warning('possible infinite loop in searchAndPrepare()');
       break;
     }
-    indexToStart = indexToStart + results.index + results[1].length;
 
-    const content = getRecursiveContentInRegion(results[2], {
+    const textToAnalyze = code.slice(indexToStart, code.length);
+    const results = searchFirstOccurrence.exec(textToAnalyze);
+    if (Boolean(results) === false || results === null) {
+      break;
+    }
+
+    const INDEX_NAME_TYPE: number = 1;
+    const INDEX_CONTENT_TYPE: number = 2;
+
+    indexToStart = indexToStart + results.index + results[INDEX_NAME_TYPE].length;
+
+    const content = getRecursiveContentInRegion(results[INDEX_CONTENT_TYPE], {
       startDelimiter: '{',
       endDelimiter: '}',
       skipStrings: true,
@@ -31,20 +43,14 @@ const searchAndPrepare = (code): model[] => {
 
     items.push({
       nameModel,
-      content: linesTsToGraphql(content, [{ from: 'Types.ObjectId', to: 'ID' }]),
+      content: linesTsToGraphql(content || '', [{ from: 'Types.ObjectId', to: 'ID' }]),
     });
-
-    count += 1;
-
-    if (count === 20) {
-      break;
-    }
   }
 
   return items;
 };
 
-export const searchModels = (code): { queries: string; listModelsMapped: string[] } => {
+export const searchModels = (code: string): { queries: string; listModelsMapped: string[] } => {
   const items: model[] = searchAndPrepare(code);
   const listModelsMapped: string[] = [];
 

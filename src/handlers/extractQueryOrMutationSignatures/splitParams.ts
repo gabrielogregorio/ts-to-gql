@@ -1,7 +1,9 @@
-type splitParamsResponse = {
-  key: string;
-  value: string;
-};
+type splitParamsResponse =
+  | {
+      key: string;
+      value: string;
+    }
+  | undefined;
 
 const LENGTH_HAS_KEY_VALUE: number = 2;
 

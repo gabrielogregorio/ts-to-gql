@@ -84,6 +84,7 @@
           "graphql",
           "resolvers",
           "gql",
+          "stdout",
           "docbytest",
           "tsconfig"
         ],
