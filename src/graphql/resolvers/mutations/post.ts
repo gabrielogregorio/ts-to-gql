@@ -5,44 +5,44 @@ type tokenRequest = {
 };
 
 type DeletePostResponse = {
-  count: Number;
+  count: number;
 };
 
 interface IInputCreatePostPayload {
   createPostPayload: {
-    body: String;
-    img: String;
-    video: String;
+    body: string;
+    img: string;
+    video: string;
   };
 }
 
 interface IInputUpdatePostPayload {
   updatePostPayload: {
-    body: String;
-    img: String;
-    video: String;
-    id: String;
+    body: string;
+    img: string;
+    video: string;
+    id: string;
   };
 }
 
 interface IInputHandlePostPayload {
   handlePostPayload: {
-    postId: String;
+    postId: string;
   };
 }
 
 interface IInputHandleDeletePayload {
   id: {
-    id: String;
+    id: string;
   };
 }
 
 type UpdatePostResponse = {
-  count: Number;
+  count: number;
 };
 
 type HandlePostResponse = {
-  includeLike: Boolean;
+  includeLike: boolean;
 };
 
 type GqlMutationPost = {

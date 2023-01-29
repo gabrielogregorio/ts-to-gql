@@ -1,16 +1,16 @@
 interface IInputCreateUserPayload {
   createUserPayload: {
-    username: String;
-    password: String;
-    name: String;
+    username: string;
+    password: string;
+    name: string;
   };
 }
 
 interface IInputUpdateUserPayload {
   updateUserPayload: {
-    username: String;
-    name: String;
-    image: String;
+    username: string;
+    name: string;
+    image: string;
   };
 }
 
