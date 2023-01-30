@@ -2,7 +2,7 @@ import { generateGraphqlSchema } from '../index';
 
 describe('', () => {
   it('', () => {
-    expect(generateGraphqlSchema()).toEqual(
+    expect(generateGraphqlSchema({ baseUrl: './src' })).toEqual(
       `type GqlModelPostSelect
 {
   id: ObjectId!
@@ -21,7 +21,7 @@ type GqlModelUserSelect
 }
 
 input IInputQueryPostRequestId {
-  id: Number!
+  id: Int!
 }
 
 input IQueryGetUserInput {
@@ -84,11 +84,11 @@ type Mutation {
 }
 
 type UpdatePostResponse {
-  count: Number!
+  count: Int!
 }
 
 type DeletePostResponse {
-  count: Number!
+  count: Int!
 }
 
 type HandlePostResponse {
@@ -100,11 +100,11 @@ type CreateUserResponse {
 }
 
 type UpdateUserResponse {
-  count: Number!
+  count: Int!
 }
 
 type deleteUserResponse {
-  count: Number!
+  count: Int!
 }
 `,
     );

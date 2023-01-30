@@ -19,3 +19,23 @@ this is experimental
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a8ab4191f9e94cec97c41ae83b1a1d7d)](https://www.codacy.com/gh/gabrielogregorio/ts-to-gql/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gabrielogregorio/ts-to-gql&amp;utm_campaign=Badge_Grade)
 
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/a8ab4191f9e94cec97c41ae83b1a1d7d)](https://www.codacy.com/gh/gabrielogregorio/ts-to-gql/dashboard?utm_source=github.com&utm_medium=referral&utm_content=gabrielogregorio/ts-to-gql&utm_campaign=Badge_Coverage)
+
+
+
+### Common errors
+
+types defined as
+ createComment(_: unknown, commentInput: CommentCreateInput): Promise<GqlModelComments>;
+
+replace this, to
+ createComment: (_: unknown, commentInput: CommentCreateInput) => Promise<GqlModelComments>;
+
+
+### Need create int, float, and other graphql types
+
+type Int = number
+type Float = number
+
+
+### Create modules folder

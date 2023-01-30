@@ -64,12 +64,11 @@ type GqlMutationPost = {
   ) => Promise<HandlePostResponse>;
 };
 
+// @ts-ignore
 export const MutationPostResolver: GqlMutationPost = {
   createPost: async (_, { createPostPayload: { body, img, video } }, { token }) =>
     ({} as unknown as GqlModelPostSelect),
-
   updatePost: async (_, { updatePostPayload: { body, img, video, id } }) => ({ count: 2 }),
-
   handleLike: async (_, { handlePostPayload: { postId } }, { token }) => ({
     includeLike: true,
   }),

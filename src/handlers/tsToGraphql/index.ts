@@ -28,8 +28,8 @@ export const tsToGraphql = (typeTs: string, isOptional: boolean, fromTo: fromToT
     string: () => `String${isOptionalSymbol}`,
     'string[]': () => `[String]${isOptionalSymbol}`,
 
-    number: () => `Number${isOptionalSymbol}`,
-    'number[]': () => `[Number]${isOptionalSymbol}`,
+    number: () => `Int${isOptionalSymbol}`,
+    'number[]': () => `[Int]${isOptionalSymbol}`,
 
     boolean: () => `Boolean${isOptionalSymbol}`,
     'boolean[]': () => `[Boolean]${isOptionalSymbol}`,

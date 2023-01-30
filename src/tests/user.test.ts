@@ -114,7 +114,7 @@ describe('', () => {
       graphqlName: 'IInputUpdatePostPayload',
     },
     {
-      graphqlContentType: '{\n  count: Number!\n}',
+      graphqlContentType: '{\n  count: Int!\n}',
       graphqlName: 'UpdatePostResponse',
     },
     {
@@ -178,7 +178,7 @@ type IInputUpdatePostPayload {
 }
 
 type UpdatePostResponse {
-  count: Number!
+  count: Int!
 }
 
 type IInputHandlePostPayload {

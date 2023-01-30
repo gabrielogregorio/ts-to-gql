@@ -44,13 +44,24 @@ describe('searchTypeResolvers()', () => {
 `;
 
     expect(searchTypeResolvers(mock, 'Query')).toEqual({
-      keys: ['GqlModelUserSelect', 'GqlModelPostSelect'],
+      keys: [
+        'GqlModelUserSelect',
+        'GqlModelUserSelect',
+        'GqlModelUserSelect',
+        'GqlModelUserSelect',
+        'GqlModelUserSelect',
+        'GqlModelUserSelect',
+        'GqlModelPostSelect',
+        'GqlModelPostSelect',
+        'GqlModelPostSelect',
+        'GqlModelPostSelect',
+      ],
       values: `input IInput {
   id: String!
 }
 
 input IInputRequestId {
-  id: Number!
+  id: Int!
 }
 
 type Query {

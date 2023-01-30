@@ -23,7 +23,7 @@ const removePromise = (type: string): string => {
 };
 
 const regexSearchFirstOccurrenceQueryOrMutation = (type: 'Query' | 'Mutation'): RegExp =>
-  new RegExp(`[type|interface]\\s{1,50}(Gql${type}\\w{1,500})\\s{0,500}=\\s{0,500}([^$]*)`);
+  new RegExp(`[type|interface]\\s{1,50}(Gql${type}\\w{1,500})\\s{0,500}={0,1}\\s{0,500}([^$]*)`);
 
 // FIXME: DUPLICATED searchAndPrepare()
 
@@ -36,7 +36,7 @@ export const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { it
   const items: model[] = [];
   const keys: string[] = [];
 
-  const INDEX_TO_BREAK_LOOP: number = 20;
+  const INDEX_TO_BREAK_LOOP: number = 2000;
   while (true) {
     preventInfiniteLoop += 1;
 
@@ -84,6 +84,8 @@ export const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { it
         keys.push(signatures.parameterResolver?.value?.replace(/[!\]\\[]/g, ''));
       }
 
+      // FIXME: verify if necessary
+      keys.push(signatures.responseResolver.replace(/[!\]\\[<>]/g, '').replace('Promise', ''));
       if (responseGraphql) {
         keys.push(responseGraphql.replace(/[!\]\\[]/g, ''));
       }
@@ -99,5 +101,5 @@ export const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { it
     });
   }
 
-  return { items, keys: [...new Set(keys)] };
+  return { items, keys };
 };

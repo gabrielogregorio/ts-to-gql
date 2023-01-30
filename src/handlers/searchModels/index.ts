@@ -15,7 +15,7 @@ const searchAndPrepare = (code: string): model[] => {
   let indexToStart = 0;
 
   const items: model[] = [];
-  const INDEX_TO_BREAK_LOOP: number = 20;
+  const INDEX_TO_BREAK_LOOP: number = 2000;
   while (true) {
     preventInfiniteLoop += 1;
     if (preventInfiniteLoop === INDEX_TO_BREAK_LOOP) {

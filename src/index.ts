@@ -6,10 +6,10 @@ import { Log } from '@/log/index';
 
 const saveGraphqlSchemaPath: string = './schema.ts_to_gql.graphql';
 
-export const generateGraphqlSchema = (): string => {
+export const generateGraphqlSchema = ({ baseUrl }: { baseUrl: string }): string => {
   Log.info('running in developer mode');
 
-  const fullCodeMerged = mapFilesAndGenerateBigFile();
+  const fullCodeMerged = mapFilesAndGenerateBigFile({ baseUrl });
 
   const typesToMerge = searchTypesInCode(fullCodeMerged);
 
@@ -19,5 +19,3 @@ export const generateGraphqlSchema = (): string => {
 
   return completeGqlModel;
 };
-
-generateGraphqlSchema();

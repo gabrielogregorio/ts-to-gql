@@ -36,10 +36,10 @@ describe('tsToGraphql(), linesTsToGraphql()', () => {
     expect(tsToGraphql('string[]', false, [])).toEqual('[String]!');
     expect(tsToGraphql('string[]', true, [])).toEqual('[String]');
 
-    expect(tsToGraphql('number', false, [])).toEqual('Number!');
-    expect(tsToGraphql('number', true, [])).toEqual('Number');
-    expect(tsToGraphql('number[]', false, [])).toEqual('[Number]!');
-    expect(tsToGraphql('number[]', true, [])).toEqual('[Number]');
+    expect(tsToGraphql('number', false, [])).toEqual('Int!');
+    expect(tsToGraphql('number', true, [])).toEqual('Int');
+    expect(tsToGraphql('number[]', false, [])).toEqual('[Int]!');
+    expect(tsToGraphql('number[]', true, [])).toEqual('[Int]');
 
     expect(tsToGraphql('boolean', false, [])).toEqual('Boolean!');
     expect(tsToGraphql('boolean', true, [])).toEqual('Boolean');
