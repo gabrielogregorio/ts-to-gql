@@ -1,21 +1,60 @@
 import { mapFilesAndGenerateBigFile } from '@/handlers/mapFilesAndGenerateBigFile';
 import { mergeGqlTypes } from '@/handlers/mergeGqlTypes';
+import { removePrefixSchema } from '@/handlers/removePrefixSchema';
 import { saveGraphqlSchema } from '@/handlers/saveGraphqlSchema';
 import { searchTypesInCode } from '@/handlers/searchTypesInCode';
 import { Log } from '@/log/index';
 
-const saveGraphqlSchemaPath: string = './schema.ts_to_gql.graphql';
+export * as ExtraTypes from './gql';
 
-export const generateGraphqlSchema = ({ baseUrl }: { baseUrl: string }): string => {
+type searchGraphqlSchemaType = {
+  pathScanProject: string;
+  pathSaveSchema?: string;
+  removePrefixFromSchema?: boolean;
+  isProduction: boolean;
+  fixSchema?: (schema: string) => string;
+  prefixModel?: string;
+  prefixMutation?: string;
+  prefixQuery?: string;
+};
+
+export const searchGraphqlSchema = ({
+  pathScanProject,
+  isProduction,
+  removePrefixFromSchema = false,
+  pathSaveSchema = './schema.ts_to_gql.graphql',
+  prefixModel = 'GqlModel',
+  prefixMutation = 'GqlMutation',
+  prefixQuery = 'GqlQuery',
+  fixSchema = (schema: string): string => schema,
+}: searchGraphqlSchemaType): string => {
+  if (isProduction) {
+    return '';
+  }
   Log.info('running in developer mode');
 
-  const fullCodeMerged = mapFilesAndGenerateBigFile({ baseUrl });
+  const fullCodeMerged = mapFilesAndGenerateBigFile({ pathScanProject });
 
-  const typesToMerge = searchTypesInCode(fullCodeMerged);
+  const typesToMerge = searchTypesInCode({
+    fullCodeMerged,
+    prefixModel,
+    prefixMutation,
+    prefixQuery,
+  });
 
-  const completeGqlModel = mergeGqlTypes(typesToMerge);
+  const completeGqlModel = fixSchema(mergeGqlTypes(typesToMerge));
 
-  saveGraphqlSchema(saveGraphqlSchemaPath, completeGqlModel);
+  let graphqlSchemaHandled = completeGqlModel;
+  if (removePrefixFromSchema) {
+    graphqlSchemaHandled = removePrefixSchema({
+      graphqlSchema: completeGqlModel,
+      prefixModel,
+      prefixMutation,
+      prefixQuery,
+    });
+  }
 
-  return completeGqlModel;
+  saveGraphqlSchema(pathSaveSchema, graphqlSchemaHandled);
+
+  return graphqlSchemaHandled;
 };

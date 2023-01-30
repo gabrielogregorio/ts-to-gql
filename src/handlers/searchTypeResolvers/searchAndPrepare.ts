@@ -22,13 +22,13 @@ const removePromise = (type: string): string => {
   return type;
 };
 
-const regexSearchFirstOccurrenceQueryOrMutation = (type: 'Query' | 'Mutation'): RegExp =>
-  new RegExp(`[type|interface]\\s{1,50}(Gql${type}\\w{1,500})\\s{0,500}={0,1}\\s{0,500}([^$]*)`);
+const regexSearchFirstOccurrenceQueryOrMutation = (prefix: string): RegExp =>
+  new RegExp(`[type|interface]\\s{1,50}(${prefix}\\w{1,500})\\s{0,500}={0,1}\\s{0,500}([^$]*)`);
 
 // FIXME: DUPLICATED searchAndPrepare()
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-export const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { items: model[]; keys: string[] } => {
+export const searchAndPrepare = (code: string, prefix: string): { items: model[]; keys: string[] } => {
   let preventInfiniteLoop = 0;
 
   let indexToIgnoreFirstOccurrence = 0;
@@ -46,7 +46,7 @@ export const searchAndPrepare = (code: string, type: 'Query' | 'Mutation'): { it
     }
 
     const textToAnalyze = code.slice(indexToIgnoreFirstOccurrence, code.length);
-    const resultFirstOccurrenceQueryOrMutation = regexSearchFirstOccurrenceQueryOrMutation(type).exec(textToAnalyze);
+    const resultFirstOccurrenceQueryOrMutation = regexSearchFirstOccurrenceQueryOrMutation(prefix).exec(textToAnalyze);
     if (Boolean(resultFirstOccurrenceQueryOrMutation) === false || resultFirstOccurrenceQueryOrMutation === null) {
       break;
     }

@@ -1,10 +1,9 @@
-import { generateGraphqlSchema } from '../index';
+import { searchGraphqlSchema } from '../index';
 
 describe('', () => {
   it('', () => {
-    expect(generateGraphqlSchema({ baseUrl: './src' })).toEqual(
-      `type GqlModelPostSelect
-{
+    expect(searchGraphqlSchema({ pathScanProject: './src', isProduction: false })).toEqual(
+      `type GqlModelPostSelect {
   id: ObjectId!
   author: GqlModelUserSelect!
   body: String
@@ -12,8 +11,7 @@ describe('', () => {
   likes: [ObjectId]!
 }
 
-type GqlModelUserSelect
-{
+type GqlModelUserSelect {
   id: ObjectId!
   username: String!
   name: String!

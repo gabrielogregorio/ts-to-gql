@@ -10,10 +10,22 @@ type searchTypesInCodeResponseType = {
   otherTypes: string;
 };
 
-export const searchTypesInCode = (fullCodeMerged: string): searchTypesInCodeResponseType => {
-  const models = searchModels(fullCodeMerged);
-  const queries = searchTypeResolvers(fullCodeMerged, 'Query');
-  const mutation = searchTypeResolvers(fullCodeMerged, 'Mutation');
+type searchTypesInCodeType = {
+  fullCodeMerged: string;
+  prefixModel: string;
+  prefixMutation: string;
+  prefixQuery: string;
+};
+
+export const searchTypesInCode = ({
+  fullCodeMerged,
+  prefixModel,
+  prefixMutation,
+  prefixQuery,
+}: searchTypesInCodeType): searchTypesInCodeResponseType => {
+  const models = searchModels(fullCodeMerged, prefixModel);
+  const queries = searchTypeResolvers(fullCodeMerged, 'Query', prefixQuery);
+  const mutation = searchTypeResolvers(fullCodeMerged, 'Mutation', prefixMutation);
   const typesNotAnalyzed = GetTypesNotMapped([...queries.keys, ...mutation.keys], models.listModelsMapped);
   const otherTypes = searchRemainingTypes({ typesNotAnalyzed, fullCodeMerged });
 

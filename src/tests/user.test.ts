@@ -230,9 +230,9 @@ type IInputDeletePost {
         return \`[String]\${typeIsOptional ? '' : '!'}\`;
       }`;
 
-    expect(searchModels(mock)).toEqual({
+    expect(searchModels(mock, 'GqlModel')).toEqual({
       listModelsMapped: ['GqlModelPostSelect', 'GqlModelUserSelect'],
-      queries: `type GqlModelPostSelect \n{
+      queries: `type GqlModelPostSelect {
       id: ObjectId!
       author: GqlModelUserSelect!
       body: String
@@ -240,7 +240,7 @@ type IInputDeletePost {
       likes: [ObjectId]!
     }
 
-type GqlModelUserSelect \n{
+type GqlModelUserSelect {
       id: ObjectId!
       username: String!
       name: String!

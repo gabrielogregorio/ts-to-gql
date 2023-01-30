@@ -43,7 +43,7 @@ describe('searchTypeResolvers()', () => {
 
 `;
 
-    expect(searchTypeResolvers(mock, 'Query')).toEqual({
+    expect(searchTypeResolvers(mock, 'Query', 'GqlQuery')).toEqual({
       keys: [
         'GqlModelUserSelect',
         'GqlModelUserSelect',

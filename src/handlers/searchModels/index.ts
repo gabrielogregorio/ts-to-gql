@@ -9,8 +9,10 @@ type model = {
 };
 
 // FIXME: DUPLICATED searchAndPrepare()
-const searchAndPrepare = (code: string): model[] => {
-  const searchFirstOccurrence = /[type|interface]\s{1,50}(GqlModel\w{1,500})\s{0,500}=\s{0,500}([^$]*)/;
+const searchAndPrepare = (code: string, prefix: string): model[] => {
+  const searchFirstOccurrence = new RegExp(
+    `[type|interface]\\s{1,50}(${prefix}\\w{1,500})\\s{0,500}=\\s{0,500}([^$]*)`,
+  );
   let preventInfiniteLoop = 0;
   let indexToStart = 0;
 
@@ -50,15 +52,15 @@ const searchAndPrepare = (code: string): model[] => {
   return items;
 };
 
-export const searchModels = (code: string): { queries: string; listModelsMapped: string[] } => {
-  const items: model[] = searchAndPrepare(code);
+export const searchModels = (code: string, prefix: string): { queries: string; listModelsMapped: string[] } => {
+  const items: model[] = searchAndPrepare(code, prefix);
   const listModelsMapped: string[] = [];
 
   const queries = items
     .map((item) => {
       listModelsMapped.push(item.nameModel);
 
-      return `type ${item.nameModel} ${item.content}`;
+      return `type ${item.nameModel} ${item?.content?.replace(/^\n/, '')}`;
     })
     .join('\n\n');
 

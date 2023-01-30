@@ -1,8 +1,12 @@
 import { prettify } from '@/handlers/prettify';
 import { searchAndPrepare } from '@/handlers/searchTypeResolvers/searchAndPrepare';
 
-export const searchTypeResolvers = (code: string, type: 'Query' | 'Mutation'): { values: string; keys: string[] } => {
-  const items = searchAndPrepare(code, type);
+export const searchTypeResolvers = (
+  code: string,
+  type: 'Query' | 'Mutation',
+  prefix: string,
+): { values: string; keys: string[] } => {
+  const items = searchAndPrepare(code, prefix);
   const getInputs = (): string =>
     items.items
       .map((item) => {
