@@ -5,9 +5,9 @@ import { saveGraphqlSchema } from '@/handlers/saveGraphqlSchema';
 import { searchTypesInCode } from '@/handlers/searchTypesInCode';
 import { Log } from '@/log/index';
 
-export * as ExtraTypes from './gql';
+export * from './gql';
 
-type searchGraphqlSchemaType = {
+type searchGqlSchemaAndBuildType = {
   pathScanProject: string;
   pathSaveSchema?: string;
   removePrefixFromSchema?: boolean;
@@ -18,7 +18,7 @@ type searchGraphqlSchemaType = {
   prefixQuery?: string;
 };
 
-export const searchGraphqlSchema = ({
+export const searchGqlSchemaAndBuild = ({
   pathScanProject,
   isProduction,
   removePrefixFromSchema = false,
@@ -27,7 +27,7 @@ export const searchGraphqlSchema = ({
   prefixMutation = 'GqlMutation',
   prefixQuery = 'GqlQuery',
   fixSchema = (schema: string): string => schema,
-}: searchGraphqlSchemaType): string => {
+}: searchGqlSchemaAndBuildType): string => {
   if (isProduction) {
     return '';
   }

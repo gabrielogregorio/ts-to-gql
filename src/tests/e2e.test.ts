@@ -1,8 +1,8 @@
-import { searchGraphqlSchema } from '../index';
+import { searchGqlSchemaAndBuild } from '../index';
 
 describe('', () => {
   it('', () => {
-    expect(searchGraphqlSchema({ pathScanProject: './src', isProduction: false })).toEqual(
+    expect(searchGqlSchemaAndBuild({ pathScanProject: './src', isProduction: false })).toEqual(
       `type GqlModelPostSelect {
   id: ObjectId!
   author: GqlModelUserSelect!
