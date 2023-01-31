@@ -30,7 +30,7 @@ export const getUtilParamAndValues = (paramsResolver: string, fullCode: string):
     return undefined;
   }
 
-  const reGetPatternPayloads = /^\s{0,50}{\s{0,50}([\w]{1,})\s{0,50}(\{[^$]{0,})/;
+  const reGetPatternPayloads = /^\s{0,50}{\s{0,50}([\w]{1,999})\s{0,50}(\{[^$]{0,999})/;
   const resultRePatternPayload = reGetPatternPayloads.exec(extraTypeData?.graphqlContentType || '');
   if (Boolean(resultRePatternPayload) === false || resultRePatternPayload === null) {
     Log.error(

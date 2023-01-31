@@ -12,7 +12,7 @@ export const extractQueryOrMutationSignatures = (
   fullCode: string,
 ): extractQueryOrMutationSignaturesResponse[] => {
   const reGetSignatures =
-    /^\s{0,50}([\w0-9_]{2,})\s{0,50}:\s{0,50}\(([^\\)]{0,500})\s{0,50}\)\s{0,}=\s{0,}>\s{0,}([^;]{1,500});\s{0,50}$/gim;
+    /^\s{0,50}([\w_]{2,})\s{0,50}:\s{0,50}\(([^\\)]{0,500})\s{0,50}\)\s{0,999}=\s{0,999}>\s{0,999}([^;]{1,500});\s{0,50}$/gim;
 
   const parameters: extractQueryOrMutationSignaturesResponse[] = [];
 
