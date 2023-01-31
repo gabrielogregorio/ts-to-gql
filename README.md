@@ -35,7 +35,7 @@ export type GqlModelPostSelect = {
 // ./src/graphql/resolvers/mutations/post.ts
 import { GqlModelPostSelect } from '@/models/Post';
 
-interface IInputCreatePostPayload {
+interface CreatePostPayload {
   createPostPayload: {
     body: string;
   };
@@ -44,7 +44,7 @@ interface IInputCreatePostPayload {
 type GqlMutationPost = {
   createPost: (
     _: unknown,
-    createPostPayload: IInputCreatePostPayload
+    createPostPayload: CreatePostPayload
   ) => Promise<GqlModelPostSelect>;
 };
 
@@ -78,14 +78,14 @@ type PostSelect  {
   body: String
 };
 
-interface IInputCreatePostPayload {
+interface CreatePostPayload {
   createPostPayload: {
     body: string;
   };
 }
 
 type Mutation {
-  createPost(createPostPayload: IInputCreatePostPayload): PostSelect!
+  createPost(createPostPayload: CreatePostPayload): PostSelect!
 }
 ```
 ## Options searchGqlSchemaAndBuild
