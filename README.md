@@ -12,12 +12,15 @@
 </div>
 
 ## Introduction
-Generate graphql types based on your typescript types
+Generate graphql types based on your typescript types.
+
+💻 🚀 [Api example here](https://github.com/gabrielogregorio/ts-to-gql-example)  🚀 💻
 
 <div align="center">
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a8ab4191f9e94cec97c41ae83b1a1d7d)](https://www.codacy.com/gh/gabrielogregorio/ts-to-gql/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=gabrielogregorio/ts-to-gql&amp;utm_campaign=Badge_Grade)  [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/a8ab4191f9e94cec97c41ae83b1a1d7d)](https://www.codacy.com/gh/gabrielogregorio/ts-to-gql/dashboard?utm_source=github.com&utm_medium=referral&utm_content=gabrielogregorio/ts-to-gql&utm_campaign=Badge_Coverage)
 </div>
+
 
 
 ### Example
