@@ -26,9 +26,9 @@ export const searchGqlSchemaAndBuild = ({
   isProduction,
   removePrefixFromSchema = false,
   pathSaveSchema = './schema.ts_to_gql.graphql',
-  prefixModel = 'GqlModel',
-  prefixMutation = 'GqlMutation',
-  prefixQuery = 'GqlQuery',
+  prefixModel = 'Model',
+  prefixMutation = 'Mutation',
+  prefixQuery = 'Query',
   fixSchema = (schema: string): string => schema,
 }: searchGqlSchemaAndBuildType): string => {
   if (isProduction) {

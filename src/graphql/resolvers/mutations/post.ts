@@ -1,4 +1,4 @@
-import { GqlModelPostSelect } from '@/models/Post';
+import { ModelPostSelect } from '@/models/Post';
 
 type tokenRequest = {
   token: string;
@@ -25,7 +25,8 @@ interface IInputUpdatePostPayload {
   };
 }
 
-interface IInputHandlePostPayload {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+interface HandlePostLikePayload {
   handlePostPayload: {
     postId: string;
   };
@@ -45,12 +46,8 @@ type HandlePostResponse = {
   includeLike: boolean;
 };
 
-type GqlMutationPost = {
-  createPost: (
-    _: unknown,
-    createPostPayload: IInputCreatePostPayload,
-    token: tokenRequest,
-  ) => Promise<GqlModelPostSelect>;
+type MutationPost = {
+  createPost: (_: unknown, createPostPayload: IInputCreatePostPayload, token: tokenRequest) => Promise<ModelPostSelect>;
   updatePost: (
     _: unknown,
     updatePostPayload: IInputUpdatePostPayload,
@@ -59,15 +56,14 @@ type GqlMutationPost = {
   deletePost: (_: unknown, id: IInputHandleDeletePayload, token: tokenRequest) => Promise<DeletePostResponse>;
   handleLike: (
     _: unknown,
-    handlePostPayload: IInputHandlePostPayload,
+    handlePostPayload: HandlePostLikePayload,
     token: tokenRequest,
   ) => Promise<HandlePostResponse>;
 };
 
 // @ts-ignore
-export const MutationPostResolver: GqlMutationPost = {
-  createPost: async (_, { createPostPayload: { body, img, video } }, { token }) =>
-    ({} as unknown as GqlModelPostSelect),
+export const MutationPostResolver: MutationPost = {
+  createPost: async (_, { createPostPayload: { body, img, video } }, { token }) => ({} as unknown as ModelPostSelect),
   updatePost: async (_, { updatePostPayload: { body, img, video, id } }) => ({ count: 2 }),
   handleLike: async (_, { handlePostPayload: { postId } }, { token }) => ({
     includeLike: true,

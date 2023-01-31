@@ -1,4 +1,4 @@
-import { GqlModelPostSelect } from '@/models/Post';
+import { ModelPostSelect } from '@/models/Post';
 
 interface IInputQueryPostRequestId {
   id: {
@@ -6,17 +6,17 @@ interface IInputQueryPostRequestId {
   };
 }
 
-type GqlQueryPost = {
-  getPosts: () => Promise<GqlModelPostSelect[]>;
-  getPost: (_: unknown, id: IInputQueryPostRequestId) => Promise<GqlModelPostSelect>;
+type QueryPost = {
+  getPosts: () => Promise<ModelPostSelect[]>;
+  getPost: (_: unknown, id: IInputQueryPostRequestId) => Promise<ModelPostSelect>;
 };
 
-export const QueryPostResolver: GqlQueryPost = {
-  async getPosts(): Promise<GqlModelPostSelect[]> {
+export const QueryPostResolver: QueryPost = {
+  async getPosts(): Promise<ModelPostSelect[]> {
     return [];
   },
 
-  async getPost(_, { id: { id } }): Promise<GqlModelPostSelect> {
-    return {} as unknown as GqlModelPostSelect;
+  async getPost(_, { id: { id } }): Promise<ModelPostSelect> {
+    return {} as unknown as ModelPostSelect;
   },
 };

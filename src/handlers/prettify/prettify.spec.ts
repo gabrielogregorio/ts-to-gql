@@ -1,16 +1,16 @@
 import { prettify } from '@/handlers/prettify';
 
 const example = `
-type GqlModelPostSelect {
+type ModelPostSelect {
   id: ObjectId!
-    author: GqlModelUserSelect!
+    author: ModelUserSelect!
       body: String
         img: String
 
    likes: [ObjectId]!
 }
 
-type GqlModelUserSelect {
+type ModelUserSelect {
   id: ObjectId!
 
   username: String!
@@ -27,11 +27,11 @@ input IQueryGetUserInput {
   }
 
 type Query {
-  getPosts: [GqlModelPostSelect]!
-  getPost(id: IInputQueryPostRequestId): GqlModelPostSelect!
-    getUsers: [GqlModelUserSelect]!
-  getUser(createUserPayload: IQueryGetUserInput): GqlModelUserSelect!
-  getMe: GqlModelUserSelect!
+  getPosts: [ModelPostSelect]!
+  getPost(id: IInputQueryPostRequestId): ModelPostSelect!
+    getUsers: [ModelUserSelect]!
+  getUser(createUserPayload: IQueryGetUserInput): ModelUserSelect!
+  getMe: ModelUserSelect!
 }
 
 input IInputCreatePostPayload {
@@ -52,15 +52,15 @@ type HandlePostResponse {
   includeLike: Boolean!
 }`;
 
-const expectFormat = `type GqlModelPostSelect {
+const expectFormat = `type ModelPostSelect {
   id: ObjectId!
-  author: GqlModelUserSelect!
+  author: ModelUserSelect!
   body: String
   img: String
   likes: [ObjectId]!
 }
 
-type GqlModelUserSelect {
+type ModelUserSelect {
   id: ObjectId!
   username: String!
   name: String!
@@ -76,11 +76,11 @@ input IQueryGetUserInput {
 }
 
 type Query {
-  getPosts: [GqlModelPostSelect]!
-  getPost(id: IInputQueryPostRequestId): GqlModelPostSelect!
-  getUsers: [GqlModelUserSelect]!
-  getUser(createUserPayload: IQueryGetUserInput): GqlModelUserSelect!
-  getMe: GqlModelUserSelect!
+  getPosts: [ModelPostSelect]!
+  getPost(id: IInputQueryPostRequestId): ModelPostSelect!
+  getUsers: [ModelUserSelect]!
+  getUser(createUserPayload: IQueryGetUserInput): ModelUserSelect!
+  getMe: ModelUserSelect!
 }
 
 input IInputCreatePostPayload {

@@ -3,15 +3,15 @@ import { searchGqlSchemaAndBuild } from '../index';
 describe('', () => {
   it('', () => {
     expect(searchGqlSchemaAndBuild({ pathScanProject: './src', isProduction: false })).toEqual(
-      `type GqlModelPostSelect {
+      `type ModelPostSelect {
   id: ObjectId!
-  author: GqlModelUserSelect!
+  author: ModelUserSelect!
   body: String
   img: String
   likes: [ObjectId]!
 }
 
-type GqlModelUserSelect {
+type ModelUserSelect {
   id: ObjectId!
   username: String!
   name: String!
@@ -27,11 +27,11 @@ input IQueryGetUserInput {
 }
 
 type Query {
-  getPosts: [GqlModelPostSelect]!
-  getPost(id: IInputQueryPostRequestId): GqlModelPostSelect!
-  getUsers: [GqlModelUserSelect]!
-  getUser(createUserPayload: IQueryGetUserInput): GqlModelUserSelect!
-  getMe: GqlModelUserSelect!
+  getPosts: [ModelPostSelect]!
+  getPost(id: IInputQueryPostRequestId): ModelPostSelect!
+  getUsers: [ModelUserSelect]!
+  getUser(createUserPayload: IQueryGetUserInput): ModelUserSelect!
+  getMe: ModelUserSelect!
 }
 
 input IInputCreatePostPayload {
@@ -51,7 +51,7 @@ input IInputHandleDeletePayload {
   id: String!
 }
 
-input IInputHandlePostPayload {
+input HandlePostLikePayload {
   postId: String!
 }
 
@@ -72,10 +72,10 @@ input IInputIdUser {
 }
 
 type Mutation {
-  createPost(createPostPayload: IInputCreatePostPayload): GqlModelPostSelect!
+  createPost(createPostPayload: IInputCreatePostPayload): ModelPostSelect!
   updatePost(updatePostPayload: IInputUpdatePostPayload): UpdatePostResponse!
   deletePost(id: IInputHandleDeletePayload): DeletePostResponse!
-  handleLike(handlePostPayload: IInputHandlePostPayload): HandlePostResponse!
+  handleLike(handlePostPayload: HandlePostLikePayload): HandlePostResponse!
   createUser(createUserPayload: IInputCreateUserPayload): CreateUserResponse!
   updateUser(updateUserPayload: IInputUpdateUserPayload): UpdateUserResponse!
   deleteUser(input: IInputIdUser): deleteUserResponse!

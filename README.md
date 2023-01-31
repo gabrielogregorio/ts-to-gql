@@ -27,13 +27,13 @@ Generate graphql types based on your typescript types. DO NOT ADD the schema gen
 
 ```ts
 // ./src/models/post.ts
-export type GqlModelPostSelect = {
+export type ModelPostSelect = {
   id: string;
   body?: string;
 };
 
 // ./src/graphql/resolvers/mutations/post.ts
-import { GqlModelPostSelect } from '@/models/Post';
+import { ModelPostSelect } from '@/models/Post';
 
 interface CreatePostPayload {
   createPostPayload: {
@@ -41,14 +41,14 @@ interface CreatePostPayload {
   };
 }
 
-type GqlMutationPost = {
+type MutationPost = {
   createPost: (
     _: unknown,
     createPostPayload: CreatePostPayload
-  ) => Promise<GqlModelPostSelect>;
+  ) => Promise<ModelPostSelect>;
 };
 
-export const MutationPostResolver: GqlMutationPost = {
+export const MutationPostResolver: MutationPost = {
   // code resolvers
 }
 ```
@@ -94,9 +94,9 @@ type Mutation {
 true will use the generated and versioned schema in the source code. false, it will generate a new schema every hot reload (or reload) of your application. |
 | (required) pathScanProject | './src' | path to search models, queries and mutations |
 | pathSaveSchema |  './schema.graphql' |  path to save schema |
-| prefixModel | 'GqlModel' | prefix to search models |
-| prefixMutation | 'GqlMutation' | prefix to search mutations |
-| prefixQuery | 'GqlQuery' | prefix to find queries |
+| prefixModel | 'Model' or 'GqlModel'  for example | prefix to search models |
+| prefixMutation | 'Mutation' or 'GqlMutation' for example | prefix to search mutations |
+| prefixQuery | 'Query' or 'GqlQuery' for example | prefix to find queries |
 | removePrefixFromSchema | true or false | if true, remove prefix schema in final schema |
 |  fixSchema | (schemaGql: string): string => schemaGql | function to fix schema, add new values or modify existents. Use to add things the library doesn't support for now |
 
@@ -121,15 +121,15 @@ Migration is manual, for now.
 3. ts-to-gql use only second param, define first param or contexts for example
 
 ```ts
-type GqlMutationPost = {
- createPost: (input: CreatePost) => Promise<GqlModePost>;
+type MutationPost = {
+ createPost: (input: CreatePost) => Promise<ModePost>;
 }
 ```
 to
 
 ```ts
-type GqlMutationPost = {
- createPost: (_: unknown, input: CreatePost) => Promise<GqlModePost>;
+type MutationPost = {
+ createPost: (_: unknown, input: CreatePost) => Promise<ModePost>;
 }
 ```
 --------
@@ -137,15 +137,15 @@ type GqlMutationPost = {
 
 4. replace your resolver to arrow types, this
 ```ts
-type GqlMutationPost = {
- createPost(_: unknown, input: CreatePost): Promise<GqlModePost>;
+type MutationPost = {
+ createPost(_: unknown, input: CreatePost): Promise<ModePost>;
 }
 ```
 to
 
 ```ts
-type GqlMutationPost = {
- createPost: (_: unknown, input: CreatePost) => Promise<GqlModePost>;
+type MutationPost = {
+ createPost: (_: unknown, input: CreatePost) => Promise<ModePost>;
 }
 ```
 
@@ -156,5 +156,5 @@ type MyPost = {}
 to
 
 ```ts
-type GqlMutationMyPost = {}
+type MutationMyPost = {}
 ```
