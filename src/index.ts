@@ -4,6 +4,9 @@ import { removePrefixSchema } from '@/handlers/removePrefixSchema';
 import { saveGraphqlSchema } from '@/handlers/saveGraphqlSchema';
 import { searchTypesInCode } from '@/handlers/searchTypesInCode';
 import { Log } from '@/log/index';
+import fsNode from 'fs';
+
+const getGraphqlSchema = (pathSchema: string): string => fsNode.readFileSync(pathSchema, 'utf8').toString();
 
 export * from './gql';
 
@@ -29,7 +32,7 @@ export const searchGqlSchemaAndBuild = ({
   fixSchema = (schema: string): string => schema,
 }: searchGqlSchemaAndBuildType): string => {
   if (isProduction) {
-    return '';
+    return getGraphqlSchema(pathSaveSchema);
   }
   Log.info('running in developer mode');
 

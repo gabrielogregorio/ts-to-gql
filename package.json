@@ -1,6 +1,6 @@
 {
   "name": "ts-to-gql",
-  "version": "0.0.1-beta.1",
+  "version": "0.0.1-beta.2",
   "description": "Generate gql types from ts types",
   "author": "Gabriel Gregorio da Silva",
   "license": "ISC",
