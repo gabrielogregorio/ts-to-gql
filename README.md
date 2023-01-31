@@ -12,7 +12,7 @@
 </div>
 
 ## Introduction
-Generate graphql types based on your typescript types.
+Generate graphql types based on your typescript types. DO NOT ADD the schema generated in .gitignore. Schemas are generated at development time and versioned!
 
 💻 🚀 [Api example here](https://github.com/gabrielogregorio/ts-to-gql-example)  🚀 💻
 
@@ -52,21 +52,20 @@ export const MutationPostResolver: GqlMutationPost = {
   // code resolvers
 }
 ```
-Configure running search and generate schema
+configure ts-to-gql
 
 ```ts
 import { searchGqlSchemaAndBuild } from 'ts-to-gql';
 
-const getGraphqlSchema = (): string => fsNode.readFileSync('./schema.graphql', 'utf8').toString();
 
-searchGqlSchemaAndBuild({
+const typeDefs = searchGqlSchemaAndBuild({
   isProduction: false,
   pathScanProject: './src',
 });
 
 this.server = new ApolloServer<MyContext>({
   resolvers,
-  typeDefs: getGraphqlSchema(),
+  typeDefs,
 });
 ```
 
@@ -91,18 +90,20 @@ type Mutation {
 ## Options searchGqlSchemaAndBuild
 | command |  example | description  |
 |---------|----------|--------------|
-| (required) isProduction | true or false | true not generate schema, use schema versioned |
+| (required) isProduction | true or false |
+true will use the generated and versioned schema in the source code. false, it will generate a new schema every hot reload (or reload) of your application. |
 | (required) pathScanProject | './src' | path to search models, queries and mutations |
 | pathSaveSchema |  './schema.graphql' |  path to save schema |
 | prefixModel | 'GqlModel' | prefix to search models |
 | prefixMutation | 'GqlMutation' | prefix to search mutations |
 | prefixQuery | 'GqlQuery' | prefix to find queries |
 | removePrefixFromSchema | true or false | if true, remove prefix schema in final schema |
-|  fixSchema | (schemaGql: string): string => schemaGql | function to fix schema, add new values or modify existents |
+|  fixSchema | (schemaGql: string): string => schemaGql | function to fix schema, add new values or modify existents. Use to add things the library doesn't support for now |
 
 ## Special types
 
-if need use Float, Int, ID or similar, import special types from 'ts-to-gql'
+if necessary use Float, Int, ID or similar, import special types from 'ts-to-gql'. Typescript types like string, number, boolean are automatically converted to String, Number and Boolean respectively.
+
 ```ts
 import {  Int, ID, DateTime, Float } from 'ts-to-gql';
 ```
@@ -117,7 +118,7 @@ Migration is manual, for now.
 
 2. use types, not interfaces (for now)
 
-3. define contexts and trash, ts-to-gql use only second param, this
+3. ts-to-gql use only second param, define first param or contexts for example
 
 ```ts
 type GqlMutationPost = {
@@ -157,5 +158,3 @@ to
 ```ts
 type GqlMutationMyPost = {}
 ```
-
-
