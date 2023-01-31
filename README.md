@@ -93,7 +93,7 @@ type Mutation {
 |---------|----------|--------------|
 | (required) isProduction | true or false | true not generate schema, use schema versioned |
 | (required) pathScanProject | './src' | path to search models, queries and mutations |
-| *pathSaveSchema |  './schema.graphql' |  path to save schema |
+| pathSaveSchema |  './schema.graphql' |  path to save schema |
 | prefixModel | 'GqlModel' | prefix to search models |
 | prefixMutation | 'GqlMutation' | prefix to search mutations |
 | prefixQuery | 'GqlQuery' | prefix to find queries |
