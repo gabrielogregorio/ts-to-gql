@@ -113,9 +113,11 @@ Int, Float is string, DateTime is Date, and ID is string
 
 Migration is manual, for now.
 
-0 - Not use Partial, extends, implements, or advanced typescript. for now
-1 -  use types, not interfaces (for now)
-2 - define contexts and trash, ts-to-gql use only second param, this
+1. Not use Partial, extends, implements, or advanced typescript. for now
+
+2. use types, not interfaces (for now)
+
+3. define contexts and trash, ts-to-gql use only second param, this
 
 ```ts
 type GqlMutationPost = {
@@ -132,7 +134,7 @@ type GqlMutationPost = {
 --------
 
 
-3 - replace your resolver to arrow types, this
+4. replace your resolver to arrow types, this
 ```ts
 type GqlMutationPost = {
  createPost(_: unknown, input: CreatePost): Promise<GqlModePost>;
@@ -146,7 +148,7 @@ type GqlMutationPost = {
 }
 ```
 
-4 - use prefix, for ts-to-gql find your models, queries and mutations (other not necessary)
+5. use prefix, for ts-to-gql find your models, queries and mutations (other not necessary)
 ```ts
 type MyPost = {}
 ```
