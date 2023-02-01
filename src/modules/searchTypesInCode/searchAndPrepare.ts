@@ -1,8 +1,7 @@
-import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
-import { tsToGraphql } from '@/handlers/tsToGraphql';
 import { extractQueryOrMutationSignatures } from '@/handlers/extractQueryOrMutationSignatures';
 import { Log } from '@/log/index';
-
+import { getRecursiveContentInRegion } from '@/utils/getRecursiveRegion';
+import { tsTypeToGql } from '@/utils/tsTypeToGql';
 // FIXME: REFACTOR
 
 type model = {
@@ -25,16 +24,16 @@ const removePromise = (type: string): string => {
 const regexSearchFirstOccurrenceQueryOrMutation = (prefix: string): RegExp =>
   new RegExp(`[type|interface]\\s{1,50}(${prefix}\\w{1,500})\\s{0,500}={0,1}\\s{0,500}([^$]*)`);
 
-// FIXME: DUPLICATED searchAndPrepare()
+type typesGetMagic = {
+  name: string;
+  content: string;
+};
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
-export const searchAndPrepare = (code: string, prefix: string): { items: model[]; keys: string[] } => {
+export const getMagicsInfo = (code: string, prefix: string): typesGetMagic[] => {
   let preventInfiniteLoop = 0;
-
   let indexToIgnoreFirstOccurrence = 0;
 
-  const items: model[] = [];
-  const keys: string[] = [];
+  const info: typesGetMagic[] = [];
 
   const INDEX_TO_BREAK_LOOP: number = 2000;
   while (true) {
@@ -56,16 +55,30 @@ export const searchAndPrepare = (code: string, prefix: string): { items: model[]
     const positionFirstOccurrence = resultFirstOccurrenceQueryOrMutation.index;
     const lengthNameQueryOrMutation = resultFirstOccurrenceQueryOrMutation[INDEX_NAME_TYPE].length;
     indexToIgnoreFirstOccurrence = indexToIgnoreFirstOccurrence + positionFirstOccurrence + lengthNameQueryOrMutation;
+    const contentNominal = resultFirstOccurrenceQueryOrMutation[INDEX_CONTENT_TYPE];
 
-    const contentQueryOrMutation = getRecursiveContentInRegion(
-      resultFirstOccurrenceQueryOrMutation[INDEX_CONTENT_TYPE],
-      {
-        startDelimiter: '{',
-        endDelimiter: '}',
-        skipStrings: true,
-      },
-    );
-    const queryOrMutationSignatures = extractQueryOrMutationSignatures(contentQueryOrMutation || '', code);
+    const content = getRecursiveContentInRegion(contentNominal, {
+      startDelimiter: '{',
+      endDelimiter: '}',
+      skipStrings: true,
+    });
+
+    const name = resultFirstOccurrenceQueryOrMutation[INDEX_NAME_TYPE];
+    info.push({
+      name,
+      content: content || '', // TODO ADD ERROR?
+    });
+  }
+
+  return info;
+};
+
+export const searchAndPrepare = (code: string, prefix: string): { items: model[]; keys: string[] } => {
+  const items: model[] = [];
+  const keys: string[] = [];
+
+  getMagicsInfo(code, prefix).forEach(({ content, name }) => {
+    const queryOrMutationSignatures = extractQueryOrMutationSignatures(content || '', code);
 
     queryOrMutationSignatures.forEach((signatures) => {
       const param = `${signatures.parameterResolver?.namePayloadGraphql}: ${signatures.parameterResolver?.value}`;
@@ -73,7 +86,7 @@ export const searchAndPrepare = (code: string, prefix: string): { items: model[]
         signatures.parameterResolver?.value === 'unknown' || signatures.parameterResolver?.value === undefined
           ? ''
           : param;
-      const responseGraphql = tsToGraphql(removePromise(signatures.responseResolver), false, []);
+      const responseGraphql = tsTypeToGql(removePromise(signatures.responseResolver), false, []);
 
       if (
         showParam &&
@@ -99,7 +112,7 @@ export const searchAndPrepare = (code: string, prefix: string): { items: model[]
         response: responseGraphql,
       });
     });
-  }
+  });
 
   return { items, keys };
 };

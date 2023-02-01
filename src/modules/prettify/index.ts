@@ -5,6 +5,7 @@ const removeAllBlankLines = (code: string): string =>
     .split('\n')
     .filter((item) => item.trim() !== '')
     .join('\n');
+
 const applyFormatInCode = (code: string): string => {
   const SPACES_BY_LEVEL = 2;
   let depth = 0;

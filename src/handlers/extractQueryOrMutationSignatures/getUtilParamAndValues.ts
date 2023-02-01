@@ -1,7 +1,7 @@
 import { splitParams } from '@/handlers/extractQueryOrMutationSignatures/splitParams';
-import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
 import { searchTypeOrInterfaceAndGetContent } from '@/handlers/searchTyieInterfacenDgetContent';
 import { Log } from '@/log/index';
+import { getRecursiveContentInRegion } from '@/utils/getRecursiveRegion';
 
 export type paramsType = {
   namePayloadGraphql: string;

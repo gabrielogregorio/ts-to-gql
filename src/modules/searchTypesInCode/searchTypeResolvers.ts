@@ -1,5 +1,5 @@
-import { prettify } from '@/handlers/prettify';
-import { searchAndPrepare } from '@/handlers/searchTypeResolvers/searchAndPrepare';
+import { prettify } from '@/modules/prettify';
+import { searchAndPrepare } from '@/modules/searchTypesInCode/searchAndPrepare';
 
 export const searchTypeResolvers = (
   code: string,

@@ -1,5 +1,5 @@
-import { searchModels } from '@/handlers/searchModels';
 import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/handlers/searchTyieInterfacenDgetContent';
+import { searchModels } from '@/modules/searchTypesInCode/searchModels';
 
 const mockCode = `
 

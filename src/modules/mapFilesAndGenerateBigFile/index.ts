@@ -19,7 +19,7 @@ const USE_ONLY_FILES_END_WITH = '.ts';
 const ignoreFiles = ['.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx'];
 const ignoreFolders = ['node_modules'];
 
-export const mapFiles = (basePath: string): string[] => {
+const mapFiles = (basePath: string): string[] => {
   Log.warning(`consider only '${USE_ONLY_FILES_END_WITH}' files`);
   Log.warning(`ignoring '${ignoreFolders}' folders`);
   Log.warning(`ignoring '${ignoreFiles}' files`);
@@ -36,4 +36,9 @@ export const mapFiles = (basePath: string): string[] => {
   Log.info(`find '${files.length}' files to analyze`);
 
   return files;
+};
+
+export const mapFilesAndGenerateBigFile = ({ pathScanProject }: { pathScanProject: string }): string => {
+  const items: string[] = mapFiles(pathScanProject);
+  return items.map((item) => fsNode.readFileSync(item, { encoding: 'utf-8' })).join('\n');
 };

@@ -1,4 +1,4 @@
-import { searchTypeResolvers } from '@/handlers/searchTypeResolvers';
+import { searchTypeResolvers } from '@/modules/searchTypesInCode/searchTypeResolvers';
 
 describe('searchTypeResolvers()', () => {
   it('should search resolvers and signatures', () => {

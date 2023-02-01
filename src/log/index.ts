@@ -1,4 +1,4 @@
-import { getActualMoment } from '@/handlers/getActualMoment';
+import { getActualMoment } from '@/utils/getActualMoment';
 
 type levelsType = 'ERROR' | 'INFO ' | 'WARN ' | 'DEBUG';
 
@@ -13,7 +13,7 @@ const colors: { [key in levelsType]: string } = {
 
 export class Log {
   private static baseStart(level: levelsType): string {
-    const start = `${level} - tsToGraphql`;
+    const start = `${level} - tsTypeToGql`;
     return `[${this.applyColors(start, colors[level])}] ${getActualMoment()}:`;
   }
 

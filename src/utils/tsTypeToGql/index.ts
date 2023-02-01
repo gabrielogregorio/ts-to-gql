@@ -3,9 +3,9 @@ type fromToType = {
   to: string;
 };
 
-const clearGraphqlTrash = (lineCode: string): string => lineCode.trim().replace(';', '');
+const removeSymbols = (lineCode: string): string => lineCode.trim().replace(';', '');
 
-const replaceTypeForOther = (targetType: string, fromTo: fromToType[]): string => {
+const replaceTypeForCustomTypes = (targetType: string, fromTo: fromToType[]): string => {
   let finalType = targetType;
   fromTo.forEach((itemTo) => {
     if (itemTo.from === finalType) {
@@ -19,32 +19,37 @@ const replaceTypeForOther = (targetType: string, fromTo: fromToType[]): string =
 
   return finalType;
 };
-export const tsToGraphql = (typeTs: string, isOptional: boolean, fromTo: fromToType[] = []): string => {
-  const typeTsHandled = replaceTypeForOther(clearGraphqlTrash(typeTs), fromTo);
 
-  const isOptionalSymbol = isOptional ? '' : '!';
+const tsTypeIsArray = (tsType: string): boolean => tsType.endsWith('[]');
+const tsArrayToGqlArray = (tsTypeArray: string): string => {
+  const INDEX_IGNORE_LIST_SYMBOL: number = 2;
+  return `[${tsTypeArray.slice(0, tsTypeArray.length - INDEX_IGNORE_LIST_SYMBOL)}]`;
+};
 
-  const typesToGqlLiterals = {
-    string: () => `String${isOptionalSymbol}`,
-    'string[]': () => `[String]${isOptionalSymbol}`,
+export const tsTypeToGql = (typeTs: string, isOptional: boolean, fromTo: fromToType[] = []): string => {
+  const typeTsHandled = replaceTypeForCustomTypes(removeSymbols(typeTs), fromTo);
 
-    number: () => `Int${isOptionalSymbol}`,
-    'number[]': () => `[Int]${isOptionalSymbol}`,
+  const typeIsOptional = isOptional ? '' : '!';
 
-    boolean: () => `Boolean${isOptionalSymbol}`,
-    'boolean[]': () => `[Boolean]${isOptionalSymbol}`,
+  const typesToGqlLiterals: { [key in string | 'default']: () => string } = {
+    string: () => `String${typeIsOptional}`,
+    'string[]': () => `[String]${typeIsOptional}`,
+
+    number: () => `Int${typeIsOptional}`,
+    'number[]': () => `[Int]${typeIsOptional}`,
+
+    boolean: () => `Boolean${typeIsOptional}`,
+    'boolean[]': () => `[Boolean]${typeIsOptional}`,
 
     default: (): string => {
-      if (typeTsHandled.endsWith('[]')) {
-        const INDEX_IGNORE_LIST_SYMBOL: number = 2;
-        return `[${typeTsHandled.slice(0, typeTsHandled.length - INDEX_IGNORE_LIST_SYMBOL)}]${isOptionalSymbol}`;
+      if (tsTypeIsArray(typeTsHandled)) {
+        return `${tsArrayToGqlArray(typeTsHandled)}${typeIsOptional}`;
       }
 
-      return `${typeTsHandled}${isOptionalSymbol}`;
+      return `${typeTsHandled}${typeIsOptional}`;
     },
   };
 
-  // @ts-ignore
   return typesToGqlLiterals[typeTsHandled]?.() || typesToGqlLiterals.default();
 };
 
@@ -54,7 +59,7 @@ const removeOptionalCharacter = (key: string): string => key.replace('?', '');
 
 const removeColonFromKeyType = (key: string, type: string): string => `\n${key}${type}`;
 
-export const linesTsToGraphql = (originalSchemaTs: string, fromTo: fromToType[] = []): string => {
+export const definitionTypeTsToGql = (originalSchemaTs: string, fromTo: fromToType[] = []): string => {
   let finalSchemaInGraphql = '';
 
   const linesOriginalSchema = originalSchemaTs.split('\n');
@@ -72,7 +77,7 @@ export const linesTsToGraphql = (originalSchemaTs: string, fromTo: fromToType[] 
 
     if (isAvailableKeyValue) {
       const keyHandled = removeOptionalCharacter(key);
-      const typeGraphqlHandled = tsToGraphql(type, keyIsOptional(key), fromTo);
+      const typeGraphqlHandled = tsTypeToGql(type, keyIsOptional(key), fromTo);
       finalSchemaInGraphql += `\n${keyHandled}: ${typeGraphqlHandled}`;
     } else if (isStartBracket) {
       finalSchemaInGraphql += removeColonFromKeyType(key, type);

@@ -1,10 +1,10 @@
-import { mapFilesAndGenerateBigFile } from '@/handlers/mapFilesAndGenerateBigFile';
-import { mergeGqlTypes } from '@/handlers/mergeGqlTypes';
-import { removePrefixSchema } from '@/handlers/removePrefixSchema';
-import { saveGraphqlSchema } from '@/handlers/saveGraphqlSchema';
-import { searchTypesInCode } from '@/handlers/searchTypesInCode';
 import { Log } from '@/log/index';
 import fsNode from 'fs';
+import { mapFilesAndGenerateBigFile } from '@/modules/mapFilesAndGenerateBigFile';
+import { mergeGqlTypes } from '@/modules/mergeGqlTypes';
+import { saveGraphqlSchema } from '@/modules/saveGraphqlSchema';
+import { searchTypesInCode } from '@/modules/searchTypesInCode';
+import { removePrefixSchema } from '@/modules/removePrefixSchema';
 
 const getGraphqlSchema = (pathSchema: string): string => fsNode.readFileSync(pathSchema, 'utf8').toString();
 

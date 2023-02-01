@@ -1,4 +1,4 @@
-import { prettify } from '@/handlers/prettify';
+import { prettify } from '@/modules/prettify';
 
 type searchTypesInCodeType = {
   models: string;
