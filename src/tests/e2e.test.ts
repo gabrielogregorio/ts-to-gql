@@ -51,7 +51,7 @@ input IInputHandleDeletePayload {
   id: String!
 }
 
-input HandlePostLikePayload {
+input IHandlePostLikePayload {
   postId: String!
 }
 
@@ -75,7 +75,7 @@ type Mutation {
   createPost(createPostPayload: IInputCreatePostPayload): ModelPostSelect!
   updatePost(updatePostPayload: IInputUpdatePostPayload): UpdatePostResponse!
   deletePost(id: IInputHandleDeletePayload): DeletePostResponse!
-  handleLike(handlePostPayload: HandlePostLikePayload): HandlePostResponse!
+  handleLike(handlePostPayload: IHandlePostLikePayload): HandlePostResponse!
   createUser(createUserPayload: IInputCreateUserPayload): CreateUserResponse!
   updateUser(updateUserPayload: IInputUpdateUserPayload): UpdateUserResponse!
   deleteUser(input: IInputIdUser): deleteUserResponse!

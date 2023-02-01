@@ -25,8 +25,7 @@ interface IInputUpdatePostPayload {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-interface HandlePostLikePayload {
+interface IHandlePostLikePayload {
   handlePostPayload: {
     postId: string;
   };
@@ -54,18 +53,13 @@ type MutationPost = {
     token: tokenRequest,
   ) => Promise<UpdatePostResponse>;
   deletePost: (_: unknown, id: IInputHandleDeletePayload, token: tokenRequest) => Promise<DeletePostResponse>;
-  handleLike: (
-    _: unknown,
-    handlePostPayload: HandlePostLikePayload,
-    token: tokenRequest,
-  ) => Promise<HandlePostResponse>;
+  handleLike: (_: unknown, handlePostPayload: IHandlePostLikePayload, token: tokenRequest) => HandlePostResponse;
 };
 
-// @ts-ignore
 export const MutationPostResolver: MutationPost = {
   createPost: async (_, { createPostPayload: { body, img, video } }, { token }) => ({} as unknown as ModelPostSelect),
   updatePost: async (_, { updatePostPayload: { body, img, video, id } }) => ({ count: 2 }),
-  handleLike: async (_, { handlePostPayload: { postId } }, { token }) => ({
+  handleLike: (_, { handlePostPayload: { postId } }, { token }) => ({
     includeLike: true,
   }),
 

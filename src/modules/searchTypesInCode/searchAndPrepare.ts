@@ -1,10 +1,8 @@
 import { extractQueryOrMutationSignatures } from '@/handlers/extractQueryOrMutationSignatures';
-import { Log } from '@/log/index';
 import { getRecursiveContentInRegion } from '@/utils/getRecursiveRegion';
 import { tsTypeToGql } from '@/utils/tsTypeToGql';
-// FIXME: REFACTOR
 
-type model = {
+type modelPrepareType = {
   nameResolver: string;
   response: string;
   nameInputParam2: string;
@@ -40,7 +38,6 @@ export const getMagicsInfo = (code: string, prefix: string): typesGetMagic[] => 
     preventInfiniteLoop += 1;
 
     if (preventInfiniteLoop === INDEX_TO_BREAK_LOOP) {
-      Log.warning('possible infinite loop in searchAndPrepare()');
       break;
     }
 
@@ -66,15 +63,15 @@ export const getMagicsInfo = (code: string, prefix: string): typesGetMagic[] => 
     const name = resultFirstOccurrenceQueryOrMutation[INDEX_NAME_TYPE];
     info.push({
       name,
-      content: content || '', // TODO ADD ERROR?
+      content: content || '',
     });
   }
 
   return info;
 };
 
-export const searchAndPrepare = (code: string, prefix: string): { items: model[]; keys: string[] } => {
-  const items: model[] = [];
+export const searchAndPrepare = (code: string, prefix: string): { items: modelPrepareType[]; keys: string[] } => {
+  const items: modelPrepareType[] = [];
   const keys: string[] = [];
 
   getMagicsInfo(code, prefix).forEach(({ content, name }) => {
@@ -97,7 +94,6 @@ export const searchAndPrepare = (code: string, prefix: string): { items: model[]
         keys.push(signatures.parameterResolver?.value?.replace(/[!\]\\[]/g, ''));
       }
 
-      // FIXME: verify if necessary
       keys.push(signatures.responseResolver.replace(/[!\]\\[<>]/g, '').replace('Promise', ''));
       if (responseGraphql) {
         keys.push(responseGraphql.replace(/[!\]\\[]/g, ''));

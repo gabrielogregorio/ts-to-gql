@@ -12,7 +12,9 @@ interface IInputUpdatePostPayload {
     };
     id: string;
   };
-}} {} // THIS IS TRASH`;
+}}
+ABC
+`;
 
     expect(
       getRecursiveContentInRegion(localMock3, {

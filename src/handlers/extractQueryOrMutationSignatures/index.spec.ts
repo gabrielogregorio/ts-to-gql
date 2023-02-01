@@ -1,13 +1,32 @@
 import { extractQueryOrMutationSignatures } from '@/handlers/extractQueryOrMutationSignatures';
 
 const mockFullCode = `
+type IInputDeletePost = {
+  input: {
+    name: string
+  }
+}
+
+type IInputHandlePostPayload = {
+  input: {
+    name: string
+  }
+}
+
+type IInputUpdatePostPayload = {
+  input: {
+    name: string
+  }
+}
+
 type InputCreatePostPayload = {
   myInputs: {
     name: string
   }
 }
-
 `;
+
+const mockResponseString = '{\n    name: String!\n  }';
 
 const mockContentResolvers = `
 getThis: () => Promise<IPostSelect>;
@@ -35,24 +54,36 @@ const mockResponse = [
     nameResolver: 'createPost',
     parameterResolver: {
       namePayloadGraphql: 'myInputs',
-      contentExtracted: `{\n    name: String!\n  }`,
+      contentExtracted: mockResponseString,
       value: 'InputCreatePostPayload',
     },
     responseResolver: 'Promise<IPostSelect>',
   },
   {
     nameResolver: 'updatePost',
-    parameterResolver: undefined,
+    parameterResolver: {
+      contentExtracted: mockResponseString,
+      namePayloadGraphql: 'input',
+      value: 'IInputUpdatePostPayload',
+    },
     responseResolver: 'Promise<UpdatePostResponse>',
   },
   {
     nameResolver: 'handleLike',
-    parameterResolver: undefined,
+    parameterResolver: {
+      contentExtracted: mockResponseString,
+      namePayloadGraphql: 'input',
+      value: 'IInputHandlePostPayload',
+    },
     responseResolver: 'Promise<HandlePostResponse>',
   },
   {
     nameResolver: 'deletePost',
-    parameterResolver: undefined,
+    parameterResolver: {
+      contentExtracted: mockResponseString,
+      namePayloadGraphql: 'input',
+      value: 'IInputDeletePost',
+    },
     responseResolver: 'Promise<DeletePostResponse>',
   },
 ];
