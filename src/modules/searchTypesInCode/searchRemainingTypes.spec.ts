@@ -1,4 +1,4 @@
-import { searchRemainingTypes } from '@/handlers/searchRemainingTypes';
+import { searchRemainingTypes } from '@/modules/searchTypesInCode/searchRemainingTypes';
 
 describe('searchRemainingTypes()', () => {
   const fullCodeMerged = `type responseGraphql = {

@@ -1,18 +1,15 @@
-/* eslint-disable max-lines-per-function */
 /* eslint-disable sonarjs/cognitive-complexity */
+
+type getRecursiveContentInRegionType = {
+  startDelimiter: string;
+  endDelimiter: string;
+  skipStrings: boolean;
+  ignoreCharactersOutString?: string[];
+};
+
 export const getRecursiveContentInRegion = (
   regionContent: string,
-  {
-    startDelimiter,
-    endDelimiter,
-    ignoreCharactersOutString = [],
-    skipStrings = true,
-  }: {
-    startDelimiter: string;
-    endDelimiter: string;
-    skipStrings: boolean;
-    ignoreCharactersOutString?: string[];
-  },
+  { startDelimiter, endDelimiter, ignoreCharactersOutString = [], skipStrings = true }: getRecursiveContentInRegionType,
 ): string | undefined => {
   let counterDept = 0;
   let started = false;

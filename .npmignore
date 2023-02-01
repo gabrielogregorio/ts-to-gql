@@ -17,4 +17,7 @@ jest.config.js
 docbytest.config.json
 babel.config.js
 src
-
+schema.ts_to_gql.graphql
+dist/tests
+dist/graphql
+dist/models

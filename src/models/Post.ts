@@ -1,10 +1,10 @@
-import { GqlModelUserSelect } from '@/models/User';
+import { ModelUserSelect } from '@/models/User';
 
 type ObjectId = string;
 
-export type GqlModelPostSelect = {
+export type ModelPostSelect = {
   id: ObjectId;
-  author: GqlModelUserSelect;
+  author: ModelUserSelect;
   body?: string;
   img?: string;
   likes: ObjectId[];

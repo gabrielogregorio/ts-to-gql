@@ -1,5 +1,5 @@
-import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
-import { linesTsToGraphql } from '@/handlers/tsToGraphql';
+import { getRecursiveContentInRegion } from '@/utils/getRecursiveRegion';
+import { definitionTypeTsToGql } from '@/utils/tsTypeToGql';
 
 type typeResponse =
   | undefined
@@ -27,7 +27,7 @@ export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string)
 
     return {
       graphqlContentType: removeFirstBreakLineIfExists(
-        linesTsToGraphql(resultInterface || '', [{ from: 'Types.ObjectId', to: 'ID' }]),
+        definitionTypeTsToGql(resultInterface || '', [{ from: 'Types.ObjectId', to: 'ID' }]),
       ),
       graphqlName: name,
     };

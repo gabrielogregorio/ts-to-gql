@@ -1,4 +1,4 @@
-import { getRecursiveContentInRegion } from '@/handlers/getRecursiveRegion';
+import { getRecursiveContentInRegion } from '@/utils/getRecursiveRegion';
 
 describe('getRecursiveContentInRegion()', () => {
   it('should get complex json', () => {
