@@ -1,4 +1,4 @@
-import { ModelPostSelect } from '@/models/Post';
+import { GqlModelPostSelect } from '@/models/Post';
 
 type tokenRequest = {
   token: string;
@@ -45,8 +45,12 @@ type HandlePostResponse = {
   includeLike: boolean;
 };
 
-type MutationPost = {
-  createPost: (_: unknown, createPostPayload: IInputCreatePostPayload, token: tokenRequest) => Promise<ModelPostSelect>;
+type GqlMutationPost = {
+  createPost: (
+    _: unknown,
+    createPostPayload: IInputCreatePostPayload,
+    token: tokenRequest,
+  ) => Promise<GqlModelPostSelect>;
   updatePost: (
     _: unknown,
     updatePostPayload: IInputUpdatePostPayload,
@@ -56,12 +60,13 @@ type MutationPost = {
   handleLike: (_: unknown, handlePostPayload: IHandlePostLikePayload, token: tokenRequest) => HandlePostResponse;
 };
 
-export const MutationPostResolver: MutationPost = {
-  createPost: async (_, { createPostPayload: { body, img, video } }, { token }) => ({} as unknown as ModelPostSelect),
+export const MutationPostResolver: GqlMutationPost = {
+  createPost: async (_, { createPostPayload: { body, img, video } }, { token }) =>
+    ({} as unknown as GqlModelPostSelect),
   updatePost: async (_, { updatePostPayload: { body, img, video, id } }) => ({ count: 2 }),
   handleLike: (_, { handlePostPayload: { postId } }, { token }) => ({
     includeLike: true,
   }),
 
-  deletePost: async (_, { id }, { token }) => ({ count: 10 }),
+  deletePost: async (context, { id }, { token }) => ({ count: 10 }),
 };

@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
-
 type getRecursiveContentInRegionType = {
   startDelimiter: string;
   endDelimiter: string;
@@ -25,6 +23,7 @@ export const getRecursiveContentInRegion = (
   const startEndLiterals = '`';
   let literalsDept = 0;
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   regionContent.split('').forEach((world) => {
     if (finish) {
       return;

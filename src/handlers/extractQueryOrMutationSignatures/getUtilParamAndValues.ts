@@ -1,6 +1,5 @@
 import { splitParams } from '@/handlers/extractQueryOrMutationSignatures/splitParams';
 import { searchTypeOrInterfaceAndGetContent } from '@/handlers/searchTyieInterfacenDgetContent';
-import { Log } from '@/log/index';
 import { getRecursiveContentInRegion } from '@/utils/getRecursiveRegion';
 
 export type paramsType = {

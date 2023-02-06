@@ -27,13 +27,13 @@ Generate graphql types based on your typescript types. DO NOT ADD the schema gen
 
 ```ts
 // ./src/models/post.ts
-export type ModelPostSelect = {
+export type GqlModelPostSelect = {
   id: string;
   body?: string;
 };
 
 // ./src/graphql/resolvers/mutations/post.ts
-import { ModelPostSelect } from '@/models/Post';
+import { GqlModelPostSelect } from '@/models/Post';
 
 interface CreatePostPayload {
   createPostPayload: {
@@ -41,14 +41,14 @@ interface CreatePostPayload {
   };
 }
 
-type MutationPost = {
+type GqlMutationPost = {
   createPost: (
     _: unknown,
     createPostPayload: CreatePostPayload
-  ) => Promise<ModelPostSelect>;
+  ) => Promise<GqlModelPostSelect>;
 };
 
-export const MutationPostResolver: MutationPost = {
+export const MutationPostResolver: GqlMutationPost = {
   // code resolvers
 }
 ```

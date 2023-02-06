@@ -1,4 +1,4 @@
-import { ModelUserSelect } from '@/models/User';
+import { GqlModelUserSelect } from '@/models/User';
 
 interface IQueryGetUserInput {
   createUserPayload: {
@@ -10,20 +10,20 @@ type tokenRequest = {
   token: string;
 };
 
-type QueryUser = {
-  getUsers: () => Promise<ModelUserSelect[]>;
-  getUser: (_: unknown, id: IQueryGetUserInput) => Promise<ModelUserSelect>;
-  getMe: (_: unknown, args: unknown, token: tokenRequest) => Promise<ModelUserSelect>;
+type GqlQueryUser = {
+  getUsers: () => Promise<GqlModelUserSelect[]>;
+  getUser: (_: unknown, id: IQueryGetUserInput) => Promise<GqlModelUserSelect>;
+  getMe: (_: unknown, args: unknown, token: tokenRequest) => Promise<GqlModelUserSelect>;
 };
 
-export const QueryUserResolver: QueryUser = {
-  async getUsers(): Promise<ModelUserSelect[]> {
+export const QueryUserResolver: GqlQueryUser = {
+  async getUsers(): Promise<GqlModelUserSelect[]> {
     return [];
   },
 
-  async getUser(_, { createUserPayload: { id } }): Promise<ModelUserSelect> {
-    return {} as unknown as ModelUserSelect;
+  async getUser(_, { createUserPayload: { id } }): Promise<GqlModelUserSelect> {
+    return {} as unknown as GqlModelUserSelect;
   },
 
-  getMe: async (_, args, { token }): Promise<ModelUserSelect> => ({} as unknown as ModelUserSelect),
+  getMe: async (_, args, { token }): Promise<GqlModelUserSelect> => ({} as unknown as GqlModelUserSelect),
 };

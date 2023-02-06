@@ -26,21 +26,16 @@
     "no-shadow": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-shadow": "error",
-    // "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-invalid-this": "error",
     "max-lines": ["error", { "max": 100, "skipBlankLines": true, "skipComments": true }],
     "max-depth": ["error", 3],
-    "max-lines-per-function": ["error", { "max": 70, "skipBlankLines": true, "skipComments": true }],
+    "max-lines-per-function": ["error", { "max": 80, "skipBlankLines": true, "skipComments": true }],
     "max-params": ["error", { "max": 4 }],
-    // "no-alert": "error",
-    // "no-console": "error",
-    // "no-delete-var": "error",
-    // "no-const-assign": "error",
     "no-unreachable": "error",
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/no-redeclare": "error",
     "@typescript-eslint/no-implicit-any-catch": "error",
-    // "id-length": [2, { "min": 3, "properties": "never" }],
+    "id-length": [2, { "min": 3, "properties": "never", "exceptions": ["_"] }],
     "@typescript-eslint/no-duplicate-enum-values": "error",
     "@typescript-eslint/no-dynamic-delete": "error",
     "@typescript-eslint/no-magic-numbers": ["error", { "ignore": [-1, 0, 1] }],
@@ -91,14 +86,6 @@
         "minLength": 3
       }
     ]
-    // "@typescript-eslint/typedef": [
-    //   "error",
-    //   {
-    //     "arrowParameter": true,
-    //     "variableDeclaration": true,
-    //     "variableDeclarationIgnoreFunction": true
-    //   }
-    // ]
   },
   "overrides": [
     {

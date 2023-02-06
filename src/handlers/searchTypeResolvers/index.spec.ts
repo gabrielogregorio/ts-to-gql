@@ -15,9 +15,9 @@ describe('searchTypeResolvers()', () => {
     };
 
     type QueryUser = {
-      getUsers: () => Promise<ModelUserSelect[]>;
-      getUser: (_: unknown, id: IInput) => Promise<ModelUserSelect>;
-      getMe: (_: unknown, args: unknown, token: tokenRequest) => Promise<ModelUserSelect>;
+      getUsers: () => Promise<GqlModelUserSelect[]>;
+      getUser: (_: unknown, id: IInput) => Promise<GqlModelUserSelect>;
+      getMe: (_: unknown, args: unknown, token: tokenRequest) => Promise<GqlModelUserSelect>;
     };
 
     interface IInputRequestId {
@@ -27,17 +27,17 @@ describe('searchTypeResolvers()', () => {
     }
 
     type QueryPost = {
-      getPosts: () => Promise<ModelPostSelect[]>;
-      getPost: (_: unknown, id: IInputRequestId) => Promise<ModelPostSelect>;
+      getPosts: () => Promise<GqlModelPostSelect[]>;
+      getPost: (_: unknown, id: IInputRequestId) => Promise<GqlModelPostSelect>;
     };
 
     export const QueryPostResolver: QueryPost = {
-      async getPosts(): Promise<ModelPostSelect[]> {
+      async getPosts(): Promise<GqlModelPostSelect[]> {
         return [];
       },
 
-      async getPost(_, { id }): Promise<ModelPostSelect> {
-        return {} as unknown as ModelPostSelect;
+      async getPost(_, { id }): Promise<GqlModelPostSelect> {
+        return {} as unknown as GqlModelPostSelect;
       },
     };
 
@@ -45,16 +45,16 @@ describe('searchTypeResolvers()', () => {
 
     expect(searchTypeResolvers(mock, 'Query', 'Query')).toEqual({
       keys: [
-        'ModelUserSelect',
-        'ModelUserSelect',
-        'ModelUserSelect',
-        'ModelUserSelect',
-        'ModelUserSelect',
-        'ModelUserSelect',
-        'ModelPostSelect',
-        'ModelPostSelect',
-        'ModelPostSelect',
-        'ModelPostSelect',
+        'GqlModelUserSelect',
+        'GqlModelUserSelect',
+        'GqlModelUserSelect',
+        'GqlModelUserSelect',
+        'GqlModelUserSelect',
+        'GqlModelUserSelect',
+        'GqlModelPostSelect',
+        'GqlModelPostSelect',
+        'GqlModelPostSelect',
+        'GqlModelPostSelect',
       ],
       values: `input IInput {
   id: String!
@@ -65,11 +65,11 @@ input IInputRequestId {
 }
 
 type Query {
-  getUsers: [ModelUserSelect]!
-  getUser(inputInside: IInput): ModelUserSelect!
-  getMe: ModelUserSelect!
-  getPosts: [ModelPostSelect]!
-  getPost(inputInside2: IInputRequestId): ModelPostSelect!
+  getUsers: [GqlModelUserSelect]!
+  getUser(inputInside: IInput): GqlModelUserSelect!
+  getMe: GqlModelUserSelect!
+  getPosts: [GqlModelPostSelect]!
+  getPost(inputInside2: IInputRequestId): GqlModelPostSelect!
 }
 `,
     });

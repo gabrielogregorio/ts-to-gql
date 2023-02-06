@@ -55,7 +55,7 @@ interface IInputDeletePost {
 }
 
 
-interface IGraphqlMutationPost {
+interface GqlMutationPost {
   getThis: () => Promise<IPostSelect>;
   createPost: (
     _: any,
@@ -199,13 +199,13 @@ type IInputDeletePost {
   it('', () => {
     const mock = `generateGraphqlSchema();
 
-    import { ModelUserSelect } from '@/models/User';
+    import { GqlModelUserSelect } from '@/models/User';
 
     type ObjectId = string;
 
-    export type ModelPostSelect = {
+    export type GqlModelPostSelect = {
       id: ObjectId;
-      author: ModelUserSelect;
+      author: GqlModelUserSelect;
       body?: string;
       img?: string;
       likes: ObjectId[];
@@ -213,7 +213,7 @@ type IInputDeletePost {
 
     type ObjectId = string;
 
-    export type ModelUserSelect = {
+    export type GqlModelUserSelect = {
       id: ObjectId;
       username: string;
       name: string;
@@ -230,17 +230,17 @@ type IInputDeletePost {
         return \`[String]\${typeIsOptional ? '' : '!'}\`;
       }`;
 
-    expect(searchModels(mock, 'Model')).toEqual({
-      listModelsMapped: ['ModelPostSelect', 'ModelUserSelect'],
-      queries: `type ModelPostSelect {
+    expect(searchModels(mock, 'GqlModel')).toEqual({
+      listModelsMapped: ['GqlModelPostSelect', 'GqlModelUserSelect'],
+      queries: `type GqlModelPostSelect {
       id: ObjectId!
-      author: ModelUserSelect!
+      author: GqlModelUserSelect!
       body: String
       img: String
       likes: [ObjectId]!
     }
 
-type ModelUserSelect {
+type GqlModelUserSelect {
       id: ObjectId!
       username: String!
       name: String!

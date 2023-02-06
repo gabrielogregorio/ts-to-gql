@@ -1,6 +1,6 @@
 type ObjectId = string;
 
-export type ModelUserSelect = {
+export type GqlModelUserSelect = {
   id: ObjectId;
   username: string;
   name: string;

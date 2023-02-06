@@ -20,7 +20,7 @@ const removePromise = (type: string): string => {
 };
 
 const regexSearchFirstOccurrenceQueryOrMutation = (prefix: string): RegExp =>
-  new RegExp(`[type|interface]\\s{1,50}(${prefix}\\w{1,500})\\s{0,500}={0,1}\\s{0,500}([^$]*)`);
+  new RegExp(`[type|interface]\\s{1,50}(${prefix}[a-zA-Z0-9_]{1,500})\\s{0,500}={0,1}\\s{0,500}([^$]*)`);
 
 type typesGetMagic = {
   name: string;
@@ -74,7 +74,7 @@ export const searchAndPrepare = (code: string, prefix: string): { items: modelPr
   const items: modelPrepareType[] = [];
   const keys: string[] = [];
 
-  getMagicsInfo(code, prefix).forEach(({ content, name }) => {
+  getMagicsInfo(code, prefix).forEach(({ content }) => {
     const queryOrMutationSignatures = extractQueryOrMutationSignatures(content || '', code);
 
     queryOrMutationSignatures.forEach((signatures) => {

@@ -36,7 +36,7 @@ type tokenRequest = {
   token: string;
 };
 
-type MutationUser = {
+type GqlMutationUser = {
   createUser: (_: unknown, createUserPayload: IInputCreateUserPayload) => Promise<CreateUserResponse>;
   updateUser: (
     _: unknown,
@@ -46,7 +46,7 @@ type MutationUser = {
   deleteUser: (_: unknown, id: IInputIdUser, token: tokenRequest) => Promise<deleteUserResponse>;
 };
 
-export const UserResolverMutation: MutationUser = {
+export const UserResolverMutation: GqlMutationUser = {
   createUser: async (_, { createUserPayload: { username, name, password } }) => ({ id: 'aaa' }),
 
   updateUser: async (_, { updateUserPayload: { username, name, image } }, { token }) => ({ count: 1 }),
