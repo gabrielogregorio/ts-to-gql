@@ -49,8 +49,7 @@ export const searchGqlSchemaAndBuild = ({
 
   let graphqlSchemaHandled = completeGqlModel;
   if (removePrefixFromSchema) {
-    graphqlSchemaHandled = removePrefixSchema({
-      graphqlSchema: completeGqlModel,
+    graphqlSchemaHandled = removePrefixSchema(completeGqlModel, {
       prefixModel,
       prefixMutation,
       prefixQuery,

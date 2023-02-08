@@ -230,22 +230,20 @@ type IInputDeletePost {
         return \`[String]\${typeIsOptional ? '' : '!'}\`;
       }`;
 
-    expect(searchModels(mock, 'GqlModel')).toEqual({
-      listModelsMapped: ['GqlModelPostSelect', 'GqlModelUserSelect'],
-      queries: `type GqlModelPostSelect {
-      id: ObjectId!
-      author: GqlModelUserSelect!
-      body: String
-      img: String
-      likes: [ObjectId]!
-    }
-
-type GqlModelUserSelect {
-      id: ObjectId!
-      username: String!
-      name: String!
-      image: String!
-    }`,
-    });
+    expect(searchModels(mock, 'GqlModel', 'model')).toEqual([
+      {
+        content:
+          '{\n      id: ObjectId;\n      author: GqlModelUserSelect;\n      body?: string;\n      img?: string;\n      likes: ObjectId[];\n    }',
+        keysNotResolved: [],
+        name: 'GqlModelPostSelect',
+        type: 'model',
+      },
+      {
+        content: '{\n      id: ObjectId;\n      username: string;\n      name: string;\n      image: string;\n    }',
+        keysNotResolved: [],
+        name: 'GqlModelUserSelect',
+        type: 'model',
+      },
+    ]);
   });
 });

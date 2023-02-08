@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { GqlModelPostSelect } from '@/models/Post';
 
 interface IInputQueryPostRequestId {

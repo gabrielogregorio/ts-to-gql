@@ -1,4 +1,5 @@
-type GqlModelPostSelect {
+type GqlModelPostSelect
+{
   id: ObjectId!
   author: GqlModelUserSelect!
   body: String
@@ -6,7 +7,8 @@ type GqlModelPostSelect {
   likes: [ObjectId]!
 }
 
-type GqlModelUserSelect {
+type GqlModelUserSelect
+{
   id: ObjectId!
   username: String!
   name: String!

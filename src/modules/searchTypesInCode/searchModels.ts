@@ -1,31 +1,24 @@
-import { getMagicsInfo } from '@/modules/searchTypesInCode/searchAndPrepare';
-import { definitionTypeTsToGql } from '@/utils/tsTypeToGql';
+import { getMagicsInfo } from '@/modules/searchTypesInCode/getMagicInfos';
 
 type modelPrepareType = {
   nameModel: string;
   content: string;
 };
 
-const searchAndPrepare = (code: string, prefix: string): modelPrepareType[] =>
-  getMagicsInfo(code, prefix).map((item) => ({
+export const searchModels = (
+  code: string,
+  prefix: string,
+  type: 'model' | 'mutation' | 'query',
+): {
+  name: string;
+  content: string;
+  keysNotResolved: string[];
+  type: 'model' | 'mutation' | 'query';
+}[] => {
+  const items: modelPrepareType[] = getMagicsInfo(code, prefix).map((item) => ({
     nameModel: item.name,
-    content: definitionTypeTsToGql(item.content || '', [{ from: 'Types.ObjectId', to: 'ID' }]),
+    content: item.content,
   }));
 
-export const searchModels = (code: string, prefix: string): { queries: string; listModelsMapped: string[] } => {
-  const items: modelPrepareType[] = searchAndPrepare(code, prefix);
-  const listModelsMapped: string[] = [];
-
-  const queries = items
-    .map((item) => {
-      listModelsMapped.push(item.nameModel);
-
-      return `type ${item.nameModel} ${item?.content?.replace(/^\n/, '')}`;
-    })
-    .join('\n\n');
-
-  return {
-    queries,
-    listModelsMapped,
-  };
+  return items.map((item) => ({ name: item.nameModel, content: item.content, keysNotResolved: [], type }));
 };

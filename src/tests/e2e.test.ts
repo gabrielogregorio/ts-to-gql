@@ -3,7 +3,8 @@ import { searchGqlSchemaAndBuild } from '../index';
 describe('', () => {
   it('', () => {
     expect(searchGqlSchemaAndBuild({ pathScanProject: './src', isProduction: false })).toEqual(
-      `type GqlModelPostSelect {
+      `type GqlModelPostSelect
+{
   id: ObjectId!
   author: GqlModelUserSelect!
   body: String
@@ -11,7 +12,8 @@ describe('', () => {
   likes: [ObjectId]!
 }
 
-type GqlModelUserSelect {
+type GqlModelUserSelect
+{
   id: ObjectId!
   username: String!
   name: String!
