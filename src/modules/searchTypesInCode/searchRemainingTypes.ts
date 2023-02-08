@@ -1,12 +1,12 @@
 import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/handlers/searchTyieInterfacenDgetContent';
 
 type searchRemainingTypesType = {
-  fullCodeMerged: string;
+  fullCode: string;
   typesNotAnalyzed: string[];
 };
 
-export const searchRemainingTypes = ({ fullCodeMerged, typesNotAnalyzed }: searchRemainingTypesType): string => {
-  const items = searchTypeOrInterfaceAndGetContent(typesNotAnalyzed, fullCodeMerged);
+export const searchRemainingTypes = ({ fullCode, typesNotAnalyzed }: searchRemainingTypesType): string => {
+  const items = searchTypeOrInterfaceAndGetContent(typesNotAnalyzed, fullCode);
 
   return textMountedSearchTypes(items || []);
 };

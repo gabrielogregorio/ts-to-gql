@@ -8,7 +8,7 @@ type typesGetMagic = {
   content: string;
 };
 
-export const getMagicsInfo = (code: string, prefix: string): typesGetMagic[] => {
+export const searchContentRegions = (code: string, prefix: string): typesGetMagic[] => {
   let preventInfiniteLoop = 0;
   let indexToIgnoreFirstOccurrence = 0;
 

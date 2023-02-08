@@ -8,6 +8,7 @@ export type modelPrepareType = {
   nameRealSignature: string | undefined;
   nameInputParam: string | undefined;
   inputParam: string | undefined;
+  needMapping: string;
 };
 
 const removePromise = (type: string): string => {
@@ -18,13 +19,11 @@ const removePromise = (type: string): string => {
   return type;
 };
 
-export const searchAndPrepare = (
+export const analyzeQueryOrMutationTs = (
   code: string,
-  prefix: string,
   itemsX: {
     name: string;
     content: string;
-    keysNotResolved: string[];
     type: 'model' | 'mutation' | 'query';
   }[],
 ): { items: modelPrepareType[]; keys: string[] } => {
@@ -63,6 +62,7 @@ export const searchAndPrepare = (
         nameInputParam: signatures?.parameterResolver?.namePayloadGraphql,
         inputParam: signatures?.parameterResolver?.contentExtracted,
         response: responseGraphql,
+        needMapping: responseGraphql,
       });
     });
   });

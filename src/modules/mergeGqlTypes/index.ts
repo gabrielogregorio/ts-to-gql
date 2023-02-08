@@ -1,6 +1,6 @@
 import { prettify } from '@/modules/prettify';
 
-type searchTypesInCodeType = {
+export type searchTypesInCodeType = {
   models: string;
   queries: string;
   mutations: string;

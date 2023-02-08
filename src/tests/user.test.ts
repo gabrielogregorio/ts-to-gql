@@ -1,5 +1,5 @@
 import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/handlers/searchTyieInterfacenDgetContent';
-import { searchModels } from '@/modules/searchTypesInCode/searchModels';
+import { searchSignatures } from '@/modules/searchTypesInCode/searchSignatures';
 
 const mockCode = `
 
@@ -230,18 +230,20 @@ type IInputDeletePost {
         return \`[String]\${typeIsOptional ? '' : '!'}\`;
       }`;
 
-    expect(searchModels(mock, 'GqlModel', 'model')).toEqual([
+    expect(searchSignatures(mock, 'GqlModel', 'model')).toEqual([
       {
         content:
           '{\n      id: ObjectId;\n      author: GqlModelUserSelect;\n      body?: string;\n      img?: string;\n      likes: ObjectId[];\n    }',
-        keysNotResolved: [],
         name: 'GqlModelPostSelect',
+        needMapping: '',
+        hasMapped: 'GqlModelPostSelect',
         type: 'model',
       },
       {
         content: '{\n      id: ObjectId;\n      username: string;\n      name: string;\n      image: string;\n    }',
-        keysNotResolved: [],
         name: 'GqlModelUserSelect',
+        needMapping: '',
+        hasMapped: 'GqlModelUserSelect',
         type: 'model',
       },
     ]);
