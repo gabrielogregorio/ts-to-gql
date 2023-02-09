@@ -2,7 +2,7 @@ import { getRecursiveContentInRegion } from '@/utils/getRecursiveRegion';
 
 describe('getRecursiveContentInRegion()', () => {
   it('should get complex json', () => {
-    const localMock3 = `
+    const localMock3: string = `
 interface IInputUpdatePostPayload {
   updatePostPayload {
     body: string;
@@ -35,7 +35,7 @@ ABC
   });
 
   it('should get a json with one dept, and strings', () => {
-    const localMock2 = `
+    const localMock2: string = `
 
 interface IInputUpdatePostPayload {
   updatePostPayload {
@@ -73,7 +73,7 @@ interface IInputHandlePostPayload {
   });
 
   it('should get a simple object ', () => {
-    const localMock = `interface IInputUpdatePostPayload {  id: string;}\n interface IInputHandlePostPayload { handlePostPayload { postId: string; }; }`;
+    const localMock: string = `interface IInputUpdatePostPayload {  id: string;}\n interface IInputHandlePostPayload { handlePostPayload { postId: string; }; }`;
 
     expect(
       getRecursiveContentInRegion(localMock, {

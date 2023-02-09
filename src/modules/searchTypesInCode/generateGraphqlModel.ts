@@ -1,10 +1,11 @@
+import { typeGql } from '@/modules/types';
 import { definitionTypeTsToGql } from '@/utils/tsTypeToGql';
 
 export const generateGraphqlModel = (
   listModelsMapped: {
     name: string;
     content: string;
-    type: 'model' | 'mutation' | 'query';
+    type: typeGql;
   }[],
 ): string =>
   listModelsMapped

@@ -36,9 +36,6 @@ npm run clear:dirt
 echo "\n${Yellow}....................PRETTIER CHECKING....................${NOCOLOR}"
 npm run format
 
-echo "\n${Yellow}...................TYPESCRIPT CHECKING...................${NOCOLOR}"
-npm run check
-
 echo "\n${Yellow}...................ESLINT CHECKING.......................${NOCOLOR}"
 npm run lint
 

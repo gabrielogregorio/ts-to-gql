@@ -1,30 +1,30 @@
 import { searchContentRegions } from '@/modules/searchTypesInCode/searchContentRegions';
+import { typeGql } from '@/modules/types';
 
 type modelPrepareType = {
   nameModel: string;
   content: string;
 };
 
-export const searchSignatures = (
-  code: string,
-  prefix: string,
-  type: 'model' | 'mutation' | 'query',
-): {
+type searchSignaturesResponse = {
   name: string;
   needMapping: string;
   hasMapped: string;
   content: string;
-  type: 'model' | 'mutation' | 'query';
-}[] => {
-  const items: modelPrepareType[] = searchContentRegions(code, prefix).map((item) => ({
-    nameModel: item.name,
-    content: item.content,
+  type: typeGql;
+};
+
+export const searchSignatures = (code: string, prefix: string, type: typeGql): searchSignaturesResponse[] => {
+  const signatures: modelPrepareType[] = searchContentRegions(code, prefix).map((signatureContent) => ({
+    nameModel: signatureContent.name,
+    content: signatureContent.content,
   }));
 
-  return items.map((item) => ({
-    name: item.nameModel,
-    content: item.content,
-    hasMapped: item.nameModel,
+  // TODO: UNIFY LOOPS?
+  return signatures.map((signature) => ({
+    name: signature.nameModel,
+    content: signature.content,
+    hasMapped: signature.nameModel,
     needMapping: '',
     type,
   }));

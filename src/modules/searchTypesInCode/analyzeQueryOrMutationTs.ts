@@ -1,5 +1,6 @@
 import { extractQueryOrMutationSignatures } from '@/handlers/extractQueryOrMutationSignatures';
-import { getOnlyKey } from '@/modules/searchTypesInCode/getOnlyKey';
+import { removeTsSymbols } from '@/modules/searchTypesInCode/removeTsSymbols';
+import { typeGql } from '@/modules/types';
 import { tsTypeToGql } from '@/utils/tsTypeToGql';
 
 export type modelPrepareType = {
@@ -23,7 +24,7 @@ const removePromise = (type: string): string => {
 type extraType = {
   name: string;
   content: string;
-  type: 'model' | 'mutation' | 'query';
+  type: typeGql;
 };
 
 type analyzeQueryOrMutationTsResponse = {
@@ -73,7 +74,7 @@ export const analyzeQueryOrMutationTs = (code: string, extra: extraType[]): anal
     });
   });
 
-  const needMapping = info.map((item) => getOnlyKey(item.needMapping));
+  const needMapping = info.map((item) => removeTsSymbols(item.needMapping));
 
   return { info, keys, needMapping };
 };

@@ -2,7 +2,7 @@ import { definitionTypeTsToGql, tsTypeToGql } from '@/utils/tsTypeToGql';
 
 describe('tsTypeToGql(), definitionTypeTsToGql()', () => {
   it('should transform lines to ts graphql', () => {
-    const mockInput = `
+    const mockInput: string = `
       key: string
       key: string[]
       key?: string
@@ -16,7 +16,7 @@ describe('tsTypeToGql(), definitionTypeTsToGql()', () => {
       key: IAuth
       key: IAuth[]`;
 
-    const mockData = `
+    const mockData: string = `
       key: String!
       key: [String]!
       key: String

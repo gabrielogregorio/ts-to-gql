@@ -1,7 +1,7 @@
 import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/handlers/searchTyieInterfacenDgetContent';
 import { searchSignatures } from '@/modules/searchTypesInCode/searchSignatures';
 
-const mockCode = `
+const mockCode: string = `
 
 interface IPostSelect {
   id: Types.ObjectId;
@@ -197,7 +197,7 @@ type IInputDeletePost {
   });
 
   it('', () => {
-    const mock = `generateGraphqlSchema();
+    const mock: string = `generateGraphqlSchema();
 
     import { GqlModelUserSelect } from '@/models/User';
 

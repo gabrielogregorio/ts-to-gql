@@ -1,25 +1,27 @@
-import { getOnlyKey } from '@/modules/searchTypesInCode/getOnlyKey';
+import { removeTsSymbols } from '@/modules/searchTypesInCode/removeTsSymbols';
+import { typeGql } from '@/modules/types';
 
 type infoType = {
   name: string;
   content: string;
-  type: 'model' | 'mutation' | 'query';
+  type: typeGql;
 };
 
-export const analyzeModel = (
-  model: {
-    name: string;
-    needMapping: string;
-    hasMapped: string;
-    content: string;
-    type: 'model' | 'mutation' | 'query';
-  }[],
-): {
+type analyzeModelType = {
+  name: string;
+  needMapping: string;
+  hasMapped: string;
+  content: string;
+  type: typeGql;
+};
+
+type analyzeModelResponseType = {
   info: infoType[];
   metadata: {
     hasMapped: string[];
   };
-} => {
+};
+export const analyzeModel = (model: analyzeModelType[]): analyzeModelResponseType => {
   const info: infoType[] = [];
 
   model.forEach((item) => {
@@ -30,7 +32,7 @@ export const analyzeModel = (
     });
   });
 
-  const hasMapped = model.map((item) => getOnlyKey(item.hasMapped));
+  const hasMapped = model.map((item) => removeTsSymbols(item.hasMapped));
 
   return {
     info,
