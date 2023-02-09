@@ -1,4 +1,5 @@
 import { extractQueryOrMutationSignatures } from '@/handlers/extractQueryOrMutationSignatures';
+import { getOnlyKey } from '@/modules/searchTypesInCode/getOnlyKey';
 import { tsTypeToGql } from '@/utils/tsTypeToGql';
 
 export type modelPrepareType = {
@@ -19,18 +20,23 @@ const removePromise = (type: string): string => {
   return type;
 };
 
-export const analyzeQueryOrMutationTs = (
-  code: string,
-  itemsX: {
-    name: string;
-    content: string;
-    type: 'model' | 'mutation' | 'query';
-  }[],
-): { items: modelPrepareType[]; keys: string[] } => {
-  const items: modelPrepareType[] = [];
+type extraType = {
+  name: string;
+  content: string;
+  type: 'model' | 'mutation' | 'query';
+};
+
+type analyzeQueryOrMutationTsResponse = {
+  info: modelPrepareType[];
+  keys: string[];
+  needMapping: string[];
+};
+
+export const analyzeQueryOrMutationTs = (code: string, extra: extraType[]): analyzeQueryOrMutationTsResponse => {
+  const info: modelPrepareType[] = [];
   const keys: string[] = [];
 
-  itemsX.forEach(({ content }) => {
+  extra.forEach(({ content }) => {
     const queryOrMutationSignatures = extractQueryOrMutationSignatures(content || '', code);
 
     queryOrMutationSignatures.forEach((signatures) => {
@@ -55,7 +61,7 @@ export const analyzeQueryOrMutationTs = (
         keys.push(responseGraphql.replace(/[!\]\\[]/g, ''));
       }
 
-      items.push({
+      info.push({
         nameResolver: signatures.nameResolver,
         nameInputParam2: showParam,
         nameRealSignature: signatures.parameterResolver?.value,
@@ -67,5 +73,7 @@ export const analyzeQueryOrMutationTs = (
     });
   });
 
-  return { items, keys };
+  const needMapping = info.map((item) => getOnlyKey(item.needMapping));
+
+  return { info, keys, needMapping };
 };

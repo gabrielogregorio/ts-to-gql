@@ -1,11 +1,12 @@
 import { prettify } from '@/modules/prettify';
-import { getOnlyKey } from '@/modules/searchTypesInCode/getOnlyKey';
 import { getTypesNotMapped } from '@/modules/searchTypesInCode/getTypesNotMapped';
 import { searchRemainingTypes } from '@/modules/searchTypesInCode/searchRemainingTypes';
 import { searchSignatures } from '@/modules/searchTypesInCode/searchSignatures';
-import { modelPrepareType, analyzeQueryOrMutationTs } from '@/modules/searchTypesInCode/analyzeQueryOrMutationTs';
+import { analyzeQueryOrMutationTs } from '@/modules/searchTypesInCode/analyzeQueryOrMutationTs';
 import { generateGraphqlQueryOrMutation } from '@/modules/searchTypesInCode/generateGraphqlQueryOrMutation';
 import { generateGraphqlModel } from '@/modules/searchTypesInCode/generateGraphqlModel';
+import { generateGraphqlInputs } from '@/modules/generateGraphqlInputs';
+import { analyzeModel } from '@/modules/searchTypesInCode/analyzeModelTs';
 
 type searchTypesInCodeResponseType = {
   models: string;
@@ -21,16 +22,6 @@ type searchTypesInCodeType = {
   prefixQuery: string;
 };
 
-const generateGraphqlInputs = (items: { items: modelPrepareType[]; keys: string[] }): string =>
-  items.items
-    .map((item) => {
-      if (item?.nameRealSignature && item?.inputParam) {
-        return `input ${item?.nameRealSignature} ${item?.inputParam}`;
-      }
-      return '';
-    })
-    .join('\n\n');
-
 export const searchTypesInCode = ({
   fullCode,
   prefixModel,
@@ -43,24 +34,23 @@ export const searchTypesInCode = ({
 
   const querySearch = analyzeQueryOrMutationTs(fullCode, queries);
   const mutationSearch = analyzeQueryOrMutationTs(fullCode, mutation);
+  const modelSearch = analyzeModel(models);
 
-  const keysMapped = models.map((item) => getOnlyKey(item.hasMapped));
-  const keysNotMapped = [
-    ...querySearch.items.map((item) => getOnlyKey(item.needMapping)),
-    ...mutationSearch.items.map((item) => getOnlyKey(item.needMapping)),
-  ];
+  const keysNotMapped = [...querySearch.needMapping, ...mutationSearch.needMapping];
 
-  const typesNotAnalyzed = getTypesNotMapped(keysNotMapped, keysMapped);
+  const typesNotAnalyzed = getTypesNotMapped(keysNotMapped, modelSearch.metadata.hasMapped);
   const otherTypes = searchRemainingTypes({ typesNotAnalyzed, fullCode });
 
   return {
-    models: generateGraphqlModel(models),
+    models: generateGraphqlModel(modelSearch.info),
     queries: prettify(
-      `\n${generateGraphqlInputs(querySearch)}\ntype ${'Query'} {\n${generateGraphqlQueryOrMutation(querySearch)}\n}`,
+      `\n${generateGraphqlInputs(querySearch.info)}\ntype ${'Query'} {\n${generateGraphqlQueryOrMutation(
+        querySearch.info,
+      )}\n}`,
     ),
     mutations: prettify(
-      `\n${generateGraphqlInputs(mutationSearch)}\ntype ${'Mutation'} {\n${generateGraphqlQueryOrMutation(
-        mutationSearch,
+      `\n${generateGraphqlInputs(mutationSearch.info)}\ntype ${'Mutation'} {\n${generateGraphqlQueryOrMutation(
+        mutationSearch.info,
       )}\n}`,
     ),
     otherTypes,
