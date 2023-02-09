@@ -6,6 +6,6 @@ export const saveGraphqlSchema = (path: string, graphqlSchema: string): void => 
     fsNode.writeFileSync(path, graphqlSchema);
     Log.info('graphql schema created');
   } catch (error: unknown) {
-    Log.error(`Error on save ${path}, please, check permissions`);
+    throw new Error(`Erro ao salvar schema no path '${path}', favor, verificar as permissões ${error}`);
   }
 };

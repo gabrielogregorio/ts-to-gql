@@ -1,10 +1,9 @@
 import { Log } from '@/log/index';
 import fsNode from 'fs';
 import { mapFilesAndGenerateBigFile } from '@/modules/mapFilesAndGenerateBigFile';
-import { mergeGqlTypes } from '@/modules/mergeGqlTypes';
 import { saveGraphqlSchema } from '@/modules/saveGraphqlSchema';
 import { searchTypesInCode } from '@/modules/searchTypesInCode';
-import { removePrefixSchema } from '@/modules/removePrefixSchema';
+import { handleFinalSchema } from '@/modules/handleFinalSchema';
 
 const getGraphqlSchema = (pathSchema: string): string => fsNode.readFileSync(pathSchema, 'utf8').toString();
 
@@ -26,9 +25,9 @@ export const searchGqlSchemaAndBuild = ({
   isProduction,
   removePrefixFromSchema = false,
   pathSaveSchema = './schema.ts_to_gql.graphql',
-  prefixModel = 'Model',
-  prefixMutation = 'Mutation',
-  prefixQuery = 'Query',
+  prefixModel = 'GqlModel',
+  prefixMutation = 'GqlMutation',
+  prefixQuery = 'GqlQuery',
   fixSchema = (schema: string): string => schema,
 }: searchGqlSchemaAndBuildType): string => {
   if (isProduction) {
@@ -36,26 +35,22 @@ export const searchGqlSchemaAndBuild = ({
   }
   Log.info('running in developer mode');
 
-  const fullCodeMerged = mapFilesAndGenerateBigFile({ pathScanProject });
+  const fullCode = mapFilesAndGenerateBigFile({ pathScanProject });
 
   const typesToMerge = searchTypesInCode({
-    fullCodeMerged,
+    fullCode,
     prefixModel,
     prefixMutation,
     prefixQuery,
   });
 
-  const completeGqlModel = fixSchema(mergeGqlTypes(typesToMerge));
-
-  let graphqlSchemaHandled = completeGqlModel;
-  if (removePrefixFromSchema) {
-    graphqlSchemaHandled = removePrefixSchema({
-      graphqlSchema: completeGqlModel,
-      prefixModel,
-      prefixMutation,
-      prefixQuery,
-    });
-  }
+  const graphqlSchemaHandled = handleFinalSchema(typesToMerge, {
+    fixSchema,
+    prefixModel,
+    prefixMutation,
+    prefixQuery,
+    removePrefixFromSchema,
+  });
 
   saveGraphqlSchema(pathSaveSchema, graphqlSchemaHandled);
 

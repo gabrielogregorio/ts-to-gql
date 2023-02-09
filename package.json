@@ -30,8 +30,7 @@
     "jest:coverage": "jest --coverage",
     "publish-npm": "npm run jest && rm -rf ./build && npm run build && npm publish",
     "prepare": "husky install",
-    "check": "tsc --noEmit",
-    "lint": "eslint -c ./.eslintrc.json --ext '.ts' 'src/**'",
+    "lint": "eslint -c ./.eslintrc.js --ext '.ts' 'src/**' && tsc --noEmit",
     "format": "prettier src/* --write"
   },
   "engines": {

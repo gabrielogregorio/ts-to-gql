@@ -1,5 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
-
 type getRecursiveContentInRegionType = {
   startDelimiter: string;
   endDelimiter: string;
@@ -11,21 +9,22 @@ export const getRecursiveContentInRegion = (
   regionContent: string,
   { startDelimiter, endDelimiter, ignoreCharactersOutString = [], skipStrings = true }: getRecursiveContentInRegionType,
 ): string | undefined => {
-  let counterDept = 0;
-  let started = false;
-  let finish = false;
-  let regionCaptured = '';
+  let counterDept: number = 0;
+  let started: boolean = false;
+  let finish: boolean = false;
+  let regionCaptured: string = '';
 
-  const startEndMicroString = "'";
-  let microStringDept = 0;
+  const startEndMicroString: string = "'";
+  let microStringDept: number = 0;
 
-  const startEndLargeString = '"';
-  let largeStringDept = 0;
+  const startEndLargeString: string = '"';
+  let largeStringDept: number = 0;
 
-  const startEndLiterals = '`';
-  let literalsDept = 0;
+  const startEndLiterals: string = '`';
+  let literalsDept: number = 0;
 
-  regionContent.split('').forEach((world) => {
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+  regionContent.split('').forEach((world: string) => {
     if (finish) {
       return;
     }

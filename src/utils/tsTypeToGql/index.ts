@@ -6,8 +6,8 @@ type fromToType = {
 const removeSymbols = (lineCode: string): string => lineCode.trim().replace(';', '');
 
 const replaceTypeForCustomTypes = (targetType: string, fromTo: fromToType[]): string => {
-  let finalType = targetType;
-  fromTo.forEach((itemTo) => {
+  let finalType: string = targetType;
+  fromTo.forEach((itemTo: fromToType) => {
     if (itemTo.from === finalType) {
       finalType = itemTo.to;
     }
@@ -27,9 +27,9 @@ const tsArrayToGqlArray = (tsTypeArray: string): string => {
 };
 
 export const tsTypeToGql = (typeTs: string, isOptional: boolean, fromTo: fromToType[] = []): string => {
-  const typeTsHandled = replaceTypeForCustomTypes(removeSymbols(typeTs), fromTo);
+  const typeTsHandled: string = replaceTypeForCustomTypes(removeSymbols(typeTs), fromTo);
 
-  const typeIsOptional = isOptional ? '' : '!';
+  const typeIsOptional: string = isOptional ? '' : '!';
 
   const typesToGqlLiterals: { [key in string | 'default']: () => string } = {
     string: () => `String${typeIsOptional}`,
@@ -60,24 +60,24 @@ const removeOptionalCharacter = (key: string): string => key.replace('?', '');
 const removeColonFromKeyType = (key: string, type: string): string => `\n${key}${type}`;
 
 export const definitionTypeTsToGql = (originalSchemaTs: string, fromTo: fromToType[] = []): string => {
-  let finalSchemaInGraphql = '';
+  let finalSchemaInGraphql: string = '';
 
-  const linesOriginalSchema = originalSchemaTs.split('\n');
+  const linesOriginalSchema: string[] = originalSchemaTs.split('\n');
 
-  linesOriginalSchema.forEach((lineOriginalSchema) => {
+  linesOriginalSchema.forEach((lineOriginalSchema: string) => {
     const [key, type] = lineOriginalSchema.split(':');
 
-    const existsKeyAndValue = key && type;
-    const isBracket = type?.trim() === '{';
-    const isNotBracket = !isBracket;
+    const existsKeyAndValue: string = key && type;
+    const isBracket: boolean = type?.trim() === '{';
+    const isNotBracket: boolean = !isBracket;
 
-    const isAvailableKeyValue = existsKeyAndValue && isNotBracket;
-    const isStartBracket = existsKeyAndValue && isBracket;
-    const existsSomething = lineOriginalSchema.trim();
+    const isAvailableKeyValue: boolean = Boolean(existsKeyAndValue) && isNotBracket;
+    const isStartBracket: boolean = Boolean(existsKeyAndValue) && isBracket;
+    const existsSomething: string = lineOriginalSchema.trim();
 
     if (isAvailableKeyValue) {
-      const keyHandled = removeOptionalCharacter(key);
-      const typeGraphqlHandled = tsTypeToGql(type, keyIsOptional(key), fromTo);
+      const keyHandled: string = removeOptionalCharacter(key);
+      const typeGraphqlHandled: string = tsTypeToGql(type, keyIsOptional(key), fromTo);
       finalSchemaInGraphql += `\n${keyHandled}: ${typeGraphqlHandled}`;
     } else if (isStartBracket) {
       finalSchemaInGraphql += removeColonFromKeyType(key, type);

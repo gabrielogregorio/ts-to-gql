@@ -1,7 +1,12 @@
+import { prettify } from '@/modules/prettify';
 import { getTypesNotMapped } from '@/modules/searchTypesInCode/getTypesNotMapped';
-import { searchModels } from '@/modules/searchTypesInCode/searchModels';
 import { searchRemainingTypes } from '@/modules/searchTypesInCode/searchRemainingTypes';
-import { searchTypeResolvers } from '@/modules/searchTypesInCode/searchTypeResolvers';
+import { searchSignatures } from '@/modules/searchTypesInCode/searchSignatures';
+import { analyzeQueryOrMutationTs } from '@/modules/searchTypesInCode/analyzeQueryOrMutationTs';
+import { generateGraphqlQueryOrMutation } from '@/modules/searchTypesInCode/generateGraphqlQueryOrMutation';
+import { generateGraphqlModel } from '@/modules/searchTypesInCode/generateGraphqlModel';
+import { generateGraphqlInputs } from '@/modules/generateGraphqlInputs';
+import { analyzeModel } from '@/modules/searchTypesInCode/analyzeModelTs';
 
 type searchTypesInCodeResponseType = {
   models: string;
@@ -11,28 +16,43 @@ type searchTypesInCodeResponseType = {
 };
 
 type searchTypesInCodeType = {
-  fullCodeMerged: string;
+  fullCode: string;
   prefixModel: string;
   prefixMutation: string;
   prefixQuery: string;
 };
 
 export const searchTypesInCode = ({
-  fullCodeMerged,
+  fullCode,
   prefixModel,
   prefixMutation,
   prefixQuery,
 }: searchTypesInCodeType): searchTypesInCodeResponseType => {
-  const models = searchModels(fullCodeMerged, prefixModel);
-  const queries = searchTypeResolvers(fullCodeMerged, 'Query', prefixQuery);
-  const mutation = searchTypeResolvers(fullCodeMerged, 'Mutation', prefixMutation);
-  const typesNotAnalyzed = getTypesNotMapped([...queries.keys, ...mutation.keys], models.listModelsMapped);
-  const otherTypes = searchRemainingTypes({ typesNotAnalyzed, fullCodeMerged });
+  const models = searchSignatures(fullCode, prefixModel, 'model');
+  const queries = searchSignatures(fullCode, prefixQuery, 'query');
+  const mutation = searchSignatures(fullCode, prefixMutation, 'mutation');
+
+  const querySearch = analyzeQueryOrMutationTs(fullCode, queries);
+  const mutationSearch = analyzeQueryOrMutationTs(fullCode, mutation);
+  const modelSearch = analyzeModel(models);
+
+  const keysNotMapped = [...querySearch.needMapping, ...mutationSearch.needMapping];
+
+  const typesNotAnalyzed = getTypesNotMapped(keysNotMapped, modelSearch.metadata.hasMapped);
+  const otherTypes = searchRemainingTypes({ typesNotAnalyzed, fullCode });
 
   return {
-    models: models.queries,
-    queries: queries.values,
-    mutations: mutation.values,
+    models: generateGraphqlModel(modelSearch.info),
+    queries: prettify(
+      `\n${generateGraphqlInputs(querySearch.info)}\ntype ${'Query'} {\n${generateGraphqlQueryOrMutation(
+        querySearch.info,
+      )}\n}`,
+    ),
+    mutations: prettify(
+      `\n${generateGraphqlInputs(mutationSearch.info)}\ntype ${'Mutation'} {\n${generateGraphqlQueryOrMutation(
+        mutationSearch.info,
+      )}\n}`,
+    ),
     otherTypes,
   };
 };

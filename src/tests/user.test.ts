@@ -1,7 +1,7 @@
 import { searchTypeOrInterfaceAndGetContent, textMountedSearchTypes } from '@/handlers/searchTyieInterfacenDgetContent';
-import { searchModels } from '@/modules/searchTypesInCode/searchModels';
+import { searchSignatures } from '@/modules/searchTypesInCode/searchSignatures';
 
-const mockCode = `
+const mockCode: string = `
 
 interface IPostSelect {
   id: Types.ObjectId;
@@ -55,7 +55,7 @@ interface IInputDeletePost {
 }
 
 
-interface IGraphqlMutationPost {
+interface GqlMutationPost {
   getThis: () => Promise<IPostSelect>;
   createPost: (
     _: any,
@@ -197,15 +197,15 @@ type IInputDeletePost {
   });
 
   it('', () => {
-    const mock = `generateGraphqlSchema();
+    const mock: string = `generateGraphqlSchema();
 
-    import { ModelUserSelect } from '@/models/User';
+    import { GqlModelUserSelect } from '@/models/User';
 
     type ObjectId = string;
 
-    export type ModelPostSelect = {
+    export type GqlModelPostSelect = {
       id: ObjectId;
-      author: ModelUserSelect;
+      author: GqlModelUserSelect;
       body?: string;
       img?: string;
       likes: ObjectId[];
@@ -213,7 +213,7 @@ type IInputDeletePost {
 
     type ObjectId = string;
 
-    export type ModelUserSelect = {
+    export type GqlModelUserSelect = {
       id: ObjectId;
       username: string;
       name: string;
@@ -230,22 +230,22 @@ type IInputDeletePost {
         return \`[String]\${typeIsOptional ? '' : '!'}\`;
       }`;
 
-    expect(searchModels(mock, 'Model')).toEqual({
-      listModelsMapped: ['ModelPostSelect', 'ModelUserSelect'],
-      queries: `type ModelPostSelect {
-      id: ObjectId!
-      author: ModelUserSelect!
-      body: String
-      img: String
-      likes: [ObjectId]!
-    }
-
-type ModelUserSelect {
-      id: ObjectId!
-      username: String!
-      name: String!
-      image: String!
-    }`,
-    });
+    expect(searchSignatures(mock, 'GqlModel', 'model')).toEqual([
+      {
+        content:
+          '{\n      id: ObjectId;\n      author: GqlModelUserSelect;\n      body?: string;\n      img?: string;\n      likes: ObjectId[];\n    }',
+        name: 'GqlModelPostSelect',
+        needMapping: '',
+        hasMapped: 'GqlModelPostSelect',
+        type: 'model',
+      },
+      {
+        content: '{\n      id: ObjectId;\n      username: string;\n      name: string;\n      image: string;\n    }',
+        name: 'GqlModelUserSelect',
+        needMapping: '',
+        hasMapped: 'GqlModelUserSelect',
+        type: 'model',
+      },
+    ]);
   });
 });

@@ -1,4 +1,5 @@
-import { ModelPostSelect } from '@/models/Post';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { GqlModelPostSelect } from '@/models/Post';
 
 interface IInputQueryPostRequestId {
   id: {
@@ -6,17 +7,17 @@ interface IInputQueryPostRequestId {
   };
 }
 
-type QueryPost = {
-  getPosts: () => Promise<ModelPostSelect[]>;
-  getPost: (_: unknown, id: IInputQueryPostRequestId) => Promise<ModelPostSelect>;
+type GqlQueryPost = {
+  getPosts: () => Promise<GqlModelPostSelect[]>;
+  getPost: (_: unknown, id: IInputQueryPostRequestId) => Promise<GqlModelPostSelect>;
 };
 
-export const QueryPostResolver: QueryPost = {
-  async getPosts(): Promise<ModelPostSelect[]> {
+export const QueryPostResolver: GqlQueryPost = {
+  async getPosts(): Promise<GqlModelPostSelect[]> {
     return [];
   },
 
-  async getPost(_, { id: { id } }): Promise<ModelPostSelect> {
-    return {} as unknown as ModelPostSelect;
+  async getPost(_, { id: { id } }): Promise<GqlModelPostSelect> {
+    return {} as unknown as GqlModelPostSelect;
   },
 };

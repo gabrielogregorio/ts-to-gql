@@ -1,6 +1,5 @@
 import { splitParams } from '@/handlers/extractQueryOrMutationSignatures/splitParams';
 import { searchTypeOrInterfaceAndGetContent } from '@/handlers/searchTyieInterfacenDgetContent';
-import { Log } from '@/log/index';
 import { getRecursiveContentInRegion } from '@/utils/getRecursiveRegion';
 
 export type paramsType = {
@@ -26,18 +25,17 @@ export const getUtilParamAndValues = (paramsResolver: string, fullCode: string):
   const extraTypeData = searchTypeOrInterfaceAndGetContent([graphqlUtilType.value], fullCode)[0];
 
   if (Boolean(extraTypeData) === false) {
-    Log.error(`O tipo '${graphqlUtilType.value}' não foi encontrado definido no código`);
-    return undefined;
+    throw new Error(
+      `O input '${graphqlUtilType.value}' não foi encontrado no código, favor, verificar se ele está em algum lugar!`,
+    );
   }
 
   const reGetPatternPayloads = /^\s{0,50}{\s{0,50}([\w]{1,999})\s{0,50}(\{[^$]{0,999})/;
   const resultRePatternPayload = reGetPatternPayloads.exec(extraTypeData?.graphqlContentType || '');
   if (Boolean(resultRePatternPayload) === false || resultRePatternPayload === null) {
-    Log.error(
-      `O tipo '${graphqlUtilType.value}' precisa seguir o padrão de payloads. substitua 'interface MyInterface { id: number }' para interface MyInterface { exampleInput: { id: number } }`,
+    throw new Error(
+      `O input '${graphqlUtilType.value}' precisa seguir o padrão de payloads, tendo um tipo dentro de outro tipo. Favor, fazer o ajuste.`,
     );
-
-    return undefined;
   }
 
   const INDEX_NAME_PAYLOAD_GRAPHQL = 1;
