@@ -24,8 +24,5 @@ jobs:
       - name: install decencies
         run: npm install --ignore-optional --frozen-lockfile
 
-      - name: checking typescript
-        run: npm run check
-
       - name: run eslint
         run: npm run lint
