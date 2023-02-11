@@ -7,9 +7,9 @@ export type modelPrepareType = {
   nameResolver: string;
   responseGraphql: string;
   parameterTransformedInGraphql: string;
-  parameterResolver: string | undefined;
+  inputResolverName: string | undefined;
   namePayloadGraphql: string | undefined;
-  contentExtracted: string | undefined;
+  inputResolverContent: string | undefined;
 };
 
 type analyzeQueryOrMutationTsResponse = {
@@ -24,25 +24,24 @@ export const analyzeQueryOrMutationTs = (
   const info: modelPrepareType[] = [];
 
   resolvers.forEach(({ content }) => {
-    // OK
     const infoResolvers = extractInfoResolvers(content || '', code);
 
     infoResolvers.forEach((signatures) => {
-      const namePayloadGraphql: string = signatures?.parameterResolver?.namePayloadGraphql || '';
-      const parameterResolver: string = signatures?.parameterResolver?.value || '';
-      const contentExtracted: string = signatures?.parameterResolver?.contentExtracted || '';
+      const namePayloadGraphql: string = signatures?.inputResolverName?.namePayloadGraphql || '';
+      const inputResolverName: string = signatures?.inputResolverName?.value || '';
+      const inputResolverContent: string = signatures?.inputResolverName?.inputResolverContent || '';
       const responseResolver: string = signatures?.responseResolver.replace('Promise', '').replace(/[><]/g, '') || '';
       const nameResolver: string = signatures?.nameResolver || '';
 
-      const parameterTransformedInGraphql = parameterResolver ? `${namePayloadGraphql}: ${parameterResolver}` : '';
+      const parameterTransformedInGraphql = inputResolverName ? `${namePayloadGraphql}: ${inputResolverName}` : '';
       const responseGraphql = tsTypeToGql(responseResolver, false, []);
 
       info.push({
         nameResolver,
         parameterTransformedInGraphql,
-        parameterResolver,
+        inputResolverName,
         namePayloadGraphql,
-        contentExtracted,
+        inputResolverContent,
         responseGraphql,
       });
     });

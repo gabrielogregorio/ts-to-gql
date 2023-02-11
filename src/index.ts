@@ -2,7 +2,7 @@ import { mapFilesAndGenerateBigFile } from '@/modules/mapFilesAndGenerateBigFile
 import { saveGraphqlSchema } from '@/modules/saveGraphqlSchema';
 import { searchTypesInCode } from '@/modules/searchTypesInCode';
 import { handleFinalSchema } from '@/modules/handleFinalSchema';
-import { readGraphqlSchema } from '@/modules/readGraphqlSchema';
+import { readFile } from '@/modules/readFile';
 
 export * from './gql';
 
@@ -28,7 +28,7 @@ export const searchGqlSchemaAndBuild = ({
   fixSchema = (schema: string): string => schema,
 }: searchGqlSchemaAndBuildType): string => {
   if (isProduction) {
-    return readGraphqlSchema(pathSaveSchema);
+    return readFile(pathSaveSchema);
   }
 
   const fullCode = mapFilesAndGenerateBigFile({ pathScanProject });

@@ -3,7 +3,7 @@ import { getUtilParamAndValues, paramsType } from '@/handlers/extractInfoResolve
 
 type extractInfoResolversResponse = {
   nameResolver: string;
-  parameterResolver: paramsType | undefined;
+  inputResolverName: paramsType | undefined;
   responseResolver: string;
 };
 
@@ -33,11 +33,11 @@ export const extractInfoResolvers = (code: string, fullCode: string): extractInf
     const paramsResolver = resultReGetSignatures[INDEX_PARAMS_POSITION];
     const responseResolver = resultReGetSignatures[INDEX_RESPONSE_RESOLVER].replace(/\n/g, '');
 
-    const parameterResolver = getUtilParamAndValues(paramsResolver, fullCode);
+    const inputResolverName = getUtilParamAndValues(paramsResolver, fullCode);
 
     parameters.push({
       nameResolver,
-      parameterResolver,
+      inputResolverName,
       responseResolver,
     });
   }

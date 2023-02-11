@@ -47,22 +47,22 @@ deletePost: (_: any, id: IInputDeletePost) => Promise<DeletePostResponse>;
 const mockResponse = [
   {
     nameResolver: 'getThis',
-    parameterResolver: undefined,
+    inputResolverName: undefined,
     responseResolver: 'Promise<IPostSelect>',
   },
   {
     nameResolver: 'createPost',
-    parameterResolver: {
+    inputResolverName: {
       namePayloadGraphql: 'myInputs',
-      contentExtracted: mockResponseString,
+      inputResolverContent: mockResponseString,
       value: 'InputCreatePostPayload',
     },
     responseResolver: 'Promise<IPostSelect>',
   },
   {
     nameResolver: 'updatePost',
-    parameterResolver: {
-      contentExtracted: mockResponseString,
+    inputResolverName: {
+      inputResolverContent: mockResponseString,
       namePayloadGraphql: 'input',
       value: 'IInputUpdatePostPayload',
     },
@@ -70,8 +70,8 @@ const mockResponse = [
   },
   {
     nameResolver: 'handleLike',
-    parameterResolver: {
-      contentExtracted: mockResponseString,
+    inputResolverName: {
+      inputResolverContent: mockResponseString,
       namePayloadGraphql: 'input',
       value: 'IInputHandlePostPayload',
     },
@@ -79,8 +79,8 @@ const mockResponse = [
   },
   {
     nameResolver: 'deletePost',
-    parameterResolver: {
-      contentExtracted: mockResponseString,
+    inputResolverName: {
+      inputResolverContent: mockResponseString,
       namePayloadGraphql: 'input',
       value: 'IInputDeletePost',
     },

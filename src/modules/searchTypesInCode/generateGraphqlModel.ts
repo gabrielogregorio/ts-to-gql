@@ -1,12 +1,10 @@
 import { definitionTypeTsToGql } from '@/utils/tsTypeToGql';
-import { analyzeModelType } from '@/utils/types';
+import { analyzeModelType, defaultFromType } from '@/utils/types';
 
-export const generateGraphqlModel = (listModelsMapped: analyzeModelType[]): string =>
-  listModelsMapped
-    .map(
-      (item) =>
-        `type ${item.name.replace(/^\n*/, '')} ${definitionTypeTsToGql(item?.content.trim()?.replace(/^\n/, '') || '', [
-          { from: 'Types.ObjectId', to: 'ID' },
-        ])}`,
-    )
-    .join('\n\n');
+export const generateGraphqlModel = (listModels: analyzeModelType[]): string => {
+  const graphqlModels = listModels.map(
+    (model) => `type ${model.name} ${definitionTypeTsToGql(model?.content || '', defaultFromType)}`,
+  );
+
+  return graphqlModels.join('\n\n');
+};

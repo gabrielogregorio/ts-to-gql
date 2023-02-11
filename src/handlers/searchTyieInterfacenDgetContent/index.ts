@@ -6,6 +6,8 @@ type typeResponse = {
   graphqlName: string;
 };
 
+const removeFirstBreakLineIfExists = (content: string): string => content.replace(/^\n{0,10}/g, '');
+
 const reGetInterfacesAndTypes = (name: string): RegExp => new RegExp(`${name}\\s{0,50}([^$]*)`);
 
 export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string): typeResponse[] =>
@@ -21,8 +23,6 @@ export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string)
       skipStrings: true,
       ignoreCharactersOutString: [',', ';'],
     });
-
-    const removeFirstBreakLineIfExists = (content: string): string => content.replace(/^\n{0,10}/g, '');
 
     return {
       graphqlContentType: removeFirstBreakLineIfExists(
