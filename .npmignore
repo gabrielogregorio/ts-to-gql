@@ -21,3 +21,5 @@ schema.ts_to_gql.graphql
 dist/tests
 dist/graphql
 dist/models
+future.txt
+
