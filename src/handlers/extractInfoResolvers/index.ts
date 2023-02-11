@@ -1,20 +1,17 @@
 import { INCREMENT_PREVENT_LOOP, LIMIT_PREVENT_INFINITE_LOOPS } from '@/constants/index';
-import { getUtilParamAndValues, paramsType } from '@/handlers/extractQueryOrMutationSignatures/getUtilParamAndValues';
+import { getUtilParamAndValues, paramsType } from '@/handlers/extractInfoResolvers/getUtilParamAndValues';
 
-type extractQueryOrMutationSignaturesResponse = {
+type extractInfoResolversResponse = {
   nameResolver: string;
-  parameterResolver: paramsType | undefined;
+  inputResolverName: paramsType | undefined;
   responseResolver: string;
 };
 
-export const extractQueryOrMutationSignatures = (
-  code: string,
-  fullCode: string,
-): extractQueryOrMutationSignaturesResponse[] => {
+export const extractInfoResolvers = (code: string, fullCode: string): extractInfoResolversResponse[] => {
   const reGetSignatures =
     /^\s{0,50}([\w_]{2,})\s{0,50}:\s{0,50}\(([^\\)]{0,500})\s{0,50}\)\s{0,999}=\s{0,999}>\s{0,999}([^;]{1,500});\s{0,50}$/gim;
 
-  const parameters: extractQueryOrMutationSignaturesResponse[] = [];
+  const parameters: extractInfoResolversResponse[] = [];
 
   let preventLoop: number = 0;
   while (true) {
@@ -36,11 +33,11 @@ export const extractQueryOrMutationSignatures = (
     const paramsResolver = resultReGetSignatures[INDEX_PARAMS_POSITION];
     const responseResolver = resultReGetSignatures[INDEX_RESPONSE_RESOLVER].replace(/\n/g, '');
 
-    const parameterResolver = getUtilParamAndValues(paramsResolver, fullCode);
+    const inputResolverName = getUtilParamAndValues(paramsResolver, fullCode);
 
     parameters.push({
       nameResolver,
-      parameterResolver,
+      inputResolverName,
       responseResolver,
     });
   }

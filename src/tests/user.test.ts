@@ -230,21 +230,15 @@ type IInputDeletePost {
         return \`[String]\${typeIsOptional ? '' : '!'}\`;
       }`;
 
-    expect(searchSignatures(mock, 'GqlModel', 'model')).toEqual([
+    expect(searchSignatures(mock, 'GqlModel')).toEqual([
       {
         content:
           '{\n      id: ObjectId;\n      author: GqlModelUserSelect;\n      body?: string;\n      img?: string;\n      likes: ObjectId[];\n    }',
         name: 'GqlModelPostSelect',
-        needMapping: '',
-        hasMapped: 'GqlModelPostSelect',
-        type: 'model',
       },
       {
         content: '{\n      id: ObjectId;\n      username: string;\n      name: string;\n      image: string;\n    }',
         name: 'GqlModelUserSelect',
-        needMapping: '',
-        hasMapped: 'GqlModelUserSelect',
-        type: 'model',
       },
     ]);
   });

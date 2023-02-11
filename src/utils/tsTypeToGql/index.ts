@@ -1,7 +1,4 @@
-type fromToType = {
-  from: string;
-  to: string;
-};
+import { fromToType } from '@/utils/types';
 
 const removeSymbols = (lineCode: string): string => lineCode.trim().replace(';', '');
 

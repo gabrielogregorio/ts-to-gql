@@ -1,4 +1,4 @@
-import { extractQueryOrMutationSignatures } from '@/handlers/extractQueryOrMutationSignatures';
+import { extractInfoResolvers } from '@/handlers/extractInfoResolvers';
 
 const mockFullCode = `
 type IInputDeletePost = {
@@ -47,22 +47,22 @@ deletePost: (_: any, id: IInputDeletePost) => Promise<DeletePostResponse>;
 const mockResponse = [
   {
     nameResolver: 'getThis',
-    parameterResolver: undefined,
+    inputResolverName: undefined,
     responseResolver: 'Promise<IPostSelect>',
   },
   {
     nameResolver: 'createPost',
-    parameterResolver: {
+    inputResolverName: {
       namePayloadGraphql: 'myInputs',
-      contentExtracted: mockResponseString,
+      inputResolverContent: mockResponseString,
       value: 'InputCreatePostPayload',
     },
     responseResolver: 'Promise<IPostSelect>',
   },
   {
     nameResolver: 'updatePost',
-    parameterResolver: {
-      contentExtracted: mockResponseString,
+    inputResolverName: {
+      inputResolverContent: mockResponseString,
       namePayloadGraphql: 'input',
       value: 'IInputUpdatePostPayload',
     },
@@ -70,8 +70,8 @@ const mockResponse = [
   },
   {
     nameResolver: 'handleLike',
-    parameterResolver: {
-      contentExtracted: mockResponseString,
+    inputResolverName: {
+      inputResolverContent: mockResponseString,
       namePayloadGraphql: 'input',
       value: 'IInputHandlePostPayload',
     },
@@ -79,16 +79,16 @@ const mockResponse = [
   },
   {
     nameResolver: 'deletePost',
-    parameterResolver: {
-      contentExtracted: mockResponseString,
+    inputResolverName: {
+      inputResolverContent: mockResponseString,
       namePayloadGraphql: 'input',
       value: 'IInputDeletePost',
     },
     responseResolver: 'Promise<DeletePostResponse>',
   },
 ];
-describe('extractQueryOrMutationSignatures()', () => {
+describe('extractInfoResolvers()', () => {
   it('should get params items', () => {
-    expect(extractQueryOrMutationSignatures(mockContentResolvers, mockFullCode)).toEqual(mockResponse);
+    expect(extractInfoResolvers(mockContentResolvers, mockFullCode)).toEqual(mockResponse);
   });
 });

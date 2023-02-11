@@ -1,11 +1,11 @@
-import { splitParams } from '@/handlers/extractQueryOrMutationSignatures/splitParams';
 import { searchTypeOrInterfaceAndGetContent } from '@/handlers/searchTyieInterfacenDgetContent';
 import { getRecursiveContentInRegion } from '@/utils/getRecursiveRegion';
+import { splitParams } from '@/handlers/extractInfoResolvers/splitParams';
 
 export type paramsType = {
   namePayloadGraphql: string;
   value: string;
-  contentExtracted: string;
+  inputResolverContent: string;
 };
 
 const typeToIgnore = ['unknown', 'any'];
@@ -44,7 +44,7 @@ export const getUtilParamAndValues = (paramsResolver: string, fullCode: string):
   const namePayloadGraphql = resultRePatternPayload[INDEX_NAME_PAYLOAD_GRAPHQL];
   const typeInsidePayloadGraphql = resultRePatternPayload[INDEX_TYPE_INSIDE_PAYLOAD_GRAPHQL];
 
-  const contentExtracted = getRecursiveContentInRegion(typeInsidePayloadGraphql, {
+  const inputResolverContent = getRecursiveContentInRegion(typeInsidePayloadGraphql, {
     startDelimiter: '{',
     endDelimiter: '}',
     skipStrings: true,
@@ -53,6 +53,6 @@ export const getUtilParamAndValues = (paramsResolver: string, fullCode: string):
   return {
     namePayloadGraphql,
     value: graphqlUtilType.value,
-    contentExtracted: contentExtracted || '',
+    inputResolverContent: inputResolverContent || '',
   };
 };

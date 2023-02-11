@@ -29,7 +29,6 @@
       "@/repository/*": ["./src/repository/*"],
       "@/constants/*": ["./src/constants/*"],
       "@/modules/*": ["./src/modules/*"],
-      "@/log/*": ["./src/log/*"],
       "@/handlers/*": ["./src/handlers/*"],
       "@/utils/*": ["./src/utils/*"],
       "@/error/*": ["./src/error/*"],

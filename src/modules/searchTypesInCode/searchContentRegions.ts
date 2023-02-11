@@ -1,18 +1,14 @@
 import { getRecursiveContentInRegion } from '@/utils/getRecursiveRegion';
+import { analyzeModelType } from '@/utils/types';
 
 const regexSearchFirstOccurrenceQueryOrMutation = (prefix: string): RegExp =>
   new RegExp(`[type|interface]\\s{1,50}(${prefix}[a-zA-Z0-9_]{1,500})\\s{0,500}={0,1}\\s{0,500}([^$]*)`);
 
-type typesGetMagic = {
-  name: string;
-  content: string;
-};
-
-export const searchContentRegions = (code: string, prefix: string): typesGetMagic[] => {
+export const searchContentRegions = (code: string, prefix: string): analyzeModelType[] => {
   let preventInfiniteLoop = 0;
   let indexToIgnoreFirstOccurrence = 0;
 
-  const info: typesGetMagic[] = [];
+  const info: analyzeModelType[] = [];
 
   const INDEX_TO_BREAK_LOOP: number = 2000;
   while (true) {

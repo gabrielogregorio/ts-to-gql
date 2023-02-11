@@ -1,4 +1,3 @@
-import { Log } from '@/log/index';
 import fsNode from 'fs';
 import path from 'path';
 
@@ -16,24 +15,18 @@ const readdirSync = (fileOrDirectory: string, listFiles: string[], ignoreFolders
 };
 
 const USE_ONLY_FILES_END_WITH = '.ts';
-const ignoreFiles = ['.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx'];
+const ignoreExtensions = ['.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx'];
 const ignoreFolders = ['node_modules'];
 
 export const mapFiles = (basePath: string): string[] => {
-  Log.warning(`consider only '${USE_ONLY_FILES_END_WITH}' files`);
-  Log.warning(`ignoring '${ignoreFolders}' folders`);
-  Log.warning(`ignoring '${ignoreFiles}' files`);
-
   const allFiles = readdirSync(basePath, [], ignoreFolders);
   const files: string[] = [];
 
   allFiles.forEach((file: string) => {
-    if (file.endsWith(USE_ONLY_FILES_END_WITH) && ignoreFiles.every((item) => file.endsWith(item) === false)) {
+    if (file.endsWith(USE_ONLY_FILES_END_WITH) && ignoreExtensions.every((item) => file.endsWith(item) === false)) {
       files.push(file);
     }
   });
-
-  Log.info(`find '${files.length}' files to analyze`);
 
   return files;
 };
