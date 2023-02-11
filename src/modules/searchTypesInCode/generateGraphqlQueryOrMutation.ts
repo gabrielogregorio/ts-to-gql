@@ -3,7 +3,7 @@ import { modelPrepareType } from '@/modules/searchTypesInCode/analyzeQueryOrMuta
 export const generateGraphqlQueryOrMutation = (items: modelPrepareType[]): string =>
   items
     .map((item) => {
-      const insideTest = `(${item.nameInputParam2})`;
-      return `  ${item.nameResolver}${item.nameInputParam ? insideTest : ''}: ${item.response}`;
+      const insideTest = `(${item.parameterTransformedInGraphql})`;
+      return `  ${item.nameResolver}${item.namePayloadGraphql ? insideTest : ''}: ${item.responseGraphql}`;
     })
     .join('\n');

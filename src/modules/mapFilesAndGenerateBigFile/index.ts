@@ -1,7 +1,7 @@
 import { mapFiles } from '@/modules/mapFiles';
-import fsNode from 'fs';
+import { readFile } from '@/modules/readFile';
 
 export const mapFilesAndGenerateBigFile = ({ pathScanProject }: { pathScanProject: string }): string => {
-  const items: string[] = mapFiles(pathScanProject);
-  return items.map((item) => fsNode.readFileSync(item, { encoding: 'utf-8' })).join('\n');
+  const pathFiles: string[] = mapFiles(pathScanProject);
+  return pathFiles.map((pathFile) => readFile(pathFile)).join('\n');
 };

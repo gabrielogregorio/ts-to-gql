@@ -1,4 +1,4 @@
-import { extractQueryOrMutationSignatures } from '@/handlers/extractQueryOrMutationSignatures';
+import { extractInfoResolvers } from '@/handlers/extractInfoResolvers';
 
 const mockFullCode = `
 type IInputDeletePost = {
@@ -87,8 +87,8 @@ const mockResponse = [
     responseResolver: 'Promise<DeletePostResponse>',
   },
 ];
-describe('extractQueryOrMutationSignatures()', () => {
+describe('extractInfoResolvers()', () => {
   it('should get params items', () => {
-    expect(extractQueryOrMutationSignatures(mockContentResolvers, mockFullCode)).toEqual(mockResponse);
+    expect(extractInfoResolvers(mockContentResolvers, mockFullCode)).toEqual(mockResponse);
   });
 });

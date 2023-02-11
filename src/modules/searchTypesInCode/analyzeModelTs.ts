@@ -1,41 +1,17 @@
 import { removeTsSymbols } from '@/modules/searchTypesInCode/removeTsSymbols';
-import { typeGql } from '@/modules/types';
-
-type infoType = {
-  name: string;
-  content: string;
-  type: typeGql;
-};
-
-type analyzeModelType = {
-  name: string;
-  needMapping: string;
-  hasMapped: string;
-  content: string;
-  type: typeGql;
-};
+import { analyzeModelType } from '@/utils/types';
 
 type analyzeModelResponseType = {
-  info: infoType[];
+  info: analyzeModelType[];
   metadata: {
     hasMapped: string[];
   };
 };
 export const analyzeModel = (model: analyzeModelType[]): analyzeModelResponseType => {
-  const info: infoType[] = [];
-
-  model.forEach((item) => {
-    info.push({
-      name: item.name,
-      content: item.content,
-      type: item.type,
-    });
-  });
-
-  const hasMapped = model.map((item) => removeTsSymbols(item.hasMapped));
+  const hasMapped = model.map((item) => removeTsSymbols(item.name));
 
   return {
-    info,
+    info: model,
     metadata: {
       hasMapped,
     },

@@ -1,13 +1,7 @@
-import { typeGql } from '@/modules/types';
 import { definitionTypeTsToGql } from '@/utils/tsTypeToGql';
+import { analyzeModelType } from '@/utils/types';
 
-export const generateGraphqlModel = (
-  listModelsMapped: {
-    name: string;
-    content: string;
-    type: typeGql;
-  }[],
-): string =>
+export const generateGraphqlModel = (listModelsMapped: analyzeModelType[]): string =>
   listModelsMapped
     .map(
       (item) =>

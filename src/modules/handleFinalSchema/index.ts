@@ -8,6 +8,7 @@ type extrasType = {
   prefixMutation: string;
   prefixQuery: string;
 };
+
 export const handleFinalSchema = (
   typesToMerge: searchTypesInCodeType,
   { fixSchema, prefixModel, prefixMutation, prefixQuery, removePrefixFromSchema }: extrasType,

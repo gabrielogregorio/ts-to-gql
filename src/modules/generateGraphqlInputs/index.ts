@@ -1,11 +1,13 @@
 import { modelPrepareType } from '@/modules/searchTypesInCode/analyzeQueryOrMutationTs';
 
-export const generateGraphqlInputs = (items: modelPrepareType[]): string =>
-  items
-    .map((item) => {
-      if (item?.nameRealSignature && item?.inputParam) {
-        return `input ${item?.nameRealSignature} ${item?.inputParam}`;
-      }
-      return '';
-    })
-    .join('\n\n');
+export const generateGraphqlInputs = (inputs: modelPrepareType[]): string => {
+  const graphqlInputs = inputs.map((input) => {
+    const hasNameAndContentResolver = input?.parameterResolver && input?.contentExtracted;
+    if (hasNameAndContentResolver) {
+      return `input ${input?.parameterResolver} ${input?.contentExtracted}`;
+    }
+    return '';
+  });
+
+  return graphqlInputs.join('\n');
+};

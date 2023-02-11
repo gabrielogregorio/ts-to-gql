@@ -1,4 +1,3 @@
-import { prettify } from '@/modules/prettify';
 import { getTypesNotMapped } from '@/modules/searchTypesInCode/getTypesNotMapped';
 import { searchRemainingTypes } from '@/modules/searchTypesInCode/searchRemainingTypes';
 import { searchSignatures } from '@/modules/searchTypesInCode/searchSignatures';
@@ -28,9 +27,10 @@ export const searchTypesInCode = ({
   prefixMutation,
   prefixQuery,
 }: searchTypesInCodeType): searchTypesInCodeResponseType => {
-  const models = searchSignatures(fullCode, prefixModel, 'model');
-  const queries = searchSignatures(fullCode, prefixQuery, 'query');
-  const mutation = searchSignatures(fullCode, prefixMutation, 'mutation');
+  // OK
+  const models = searchSignatures(fullCode, prefixModel);
+  const queries = searchSignatures(fullCode, prefixQuery);
+  const mutation = searchSignatures(fullCode, prefixMutation);
 
   const querySearch = analyzeQueryOrMutationTs(fullCode, queries);
   const mutationSearch = analyzeQueryOrMutationTs(fullCode, mutation);
@@ -43,16 +43,12 @@ export const searchTypesInCode = ({
 
   return {
     models: generateGraphqlModel(modelSearch.info),
-    queries: prettify(
-      `\n${generateGraphqlInputs(querySearch.info)}\ntype ${'Query'} {\n${generateGraphqlQueryOrMutation(
-        querySearch.info,
-      )}\n}`,
-    ),
-    mutations: prettify(
-      `\n${generateGraphqlInputs(mutationSearch.info)}\ntype ${'Mutation'} {\n${generateGraphqlQueryOrMutation(
-        mutationSearch.info,
-      )}\n}`,
-    ),
+    queries: `${generateGraphqlInputs(querySearch.info)}\ntype ${'Query'} {\n${generateGraphqlQueryOrMutation(
+      querySearch.info,
+    )}\n}`,
+    mutations: `${generateGraphqlInputs(mutationSearch.info)}\ntype ${'Mutation'} {\n${generateGraphqlQueryOrMutation(
+      mutationSearch.info,
+    )}\n}`,
     otherTypes,
   };
 };

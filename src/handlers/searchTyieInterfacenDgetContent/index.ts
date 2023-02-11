@@ -14,6 +14,7 @@ export const searchTypeOrInterfaceAndGetContent = (list: string[], code: string)
     if (Boolean(options) === false || options === null) {
       throw new Error(`tipo ${name} não encontrado no código, favor, verificar se esse tipo existe no código!`);
     }
+
     const resultInterface = getRecursiveContentInRegion(options[1], {
       startDelimiter: '{',
       endDelimiter: '}',
